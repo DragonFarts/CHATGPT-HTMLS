@@ -1,0 +1,70 @@
+<html>
+  <head>
+    <title>Flying Through Space</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r109/three.min.js"></script>
+  </head>
+  <body>
+    <script>
+      // Set up the scene
+      var scene = new THREE.Scene();
+      var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
+      var renderer = new THREE.WebGLRenderer();
+      renderer.setSize( window.innerWidth, window.innerHeight );
+      document.body.appendChild( renderer.domElement );
+      
+      // Create the stars
+      var starsGeometry = new THREE.Geometry();
+      for ( var i = 0; i < 1000000; i ++ ) {
+        var star = new THREE.Vector3();
+        star.x = THREE.Math.randFloatSpread( 20000 );
+        star.y = THREE.Math.randFloatSpread( 20000 );
+        star.z = THREE.Math.randFloatSpread( 20000 );
+        starsGeometry.vertices.push( star );
+      }
+      var starsMaterial = new THREE.PointsMaterial( { color: 0x888888, size: 5.4 } );
+      var starField = new THREE.Points( starsGeometry, starsMaterial );
+      scene.add( starField );
+      
+      // Create the spaceship
+      var geometry = new THREE.BoxGeometry( 0.01, 0.01, 0.01 );
+      var material = new THREE.MeshBasicMaterial( { color: 0x00ff00, opacity: 0 } );
+      var cube = new THREE.Mesh( geometry, material );
+      scene.add( cube );
+      
+      // Set the camera to follow the spaceship
+      camera.position.z = 5;
+      camera.position.y = 1;
+      camera.lookAt(cube.position);
+      
+      // Set up the thruster
+      var thrusterOn = true;
+      document.addEventListener("keydown", onDocumentKeyDown, true);
+      function onDocumentKeyDown(event) {
+        var keyCode = event.which;
+        if (keyCode == 32) {
+          thrusterOn = false;
+        }
+      }
+      document.addEventListener("keyup", onDocumentKeyUp, false);
+      function onDocumentKeyUp(event) {
+        var keyCode = event.which;
+        if (keyCode == 32) {
+          thrusterOn = false;
+        }
+      }
+      
+      // Render the scene
+      var render = function () {
+        requestAnimationFrame( render );
+        if (thrusterOn) {
+          cube.position.z -= 2.16;
+        }
+        camera.position.z = cube.position.z + 5;
+        camera.position.y = cube.position.y + 1;
+        camera.lookAt(cube.position);
+        renderer.render(scene, camera);
+      };
+      render();
+    </script>
+  </body>
+</html>

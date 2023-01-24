@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Web Audio API Example</title>
+</head>
+<body>
+<button id="play-button">Play</button>
+
+<script>
+  var playButton = document.getElementById("play-button");
+  var audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+  // Oscillator 1
+  var oscillator1 = audioContext.createOscillator();
+  var frequencyArray1 = [523.25, 783.99, 659.25, 523.25, 440, 739.99, 523.25];
+  var currentFrequencyIndex1 = 0;
+  var incrementTime1 = 500;
+
+  // Oscillator 2
+  var oscillator2 = audioContext.createOscillator();
+  var frequencyArray2 = [329.63, 392, 440, 493.88, 587.33, 698.46, 783.99];
+  var currentFrequencyIndex2 = 0;
+  var incrementTime2 = 500;
+
+  // Oscillator 3
+  var oscillator3 = audioContext.createOscillator();
+  var frequencyArray3 = [523.25, 783.99, 659.25, 523.25, 440, 739.99, 523.25];
+  var currentFrequencyIndex3 = 0;
+  var incrementTime3 = 500;
+
+  // Oscillator 4
+  var oscillator4 = audioContext.createOscillator();
+  var frequencyArray4 = [329.63, 392, 440, 493.88, 587.33, 698.46, 783.99];
+  var currentFrequencyIndex4 = 0;
+  var incrementTime4 = 500;
+
+
+  playButton.addEventListener("click", function() {
+
+    // Oscillator 1
+    oscillator1.frequency.value = frequencyArray1[currentFrequencyIndex1];
+    oscillator1.type = "sine";
+    oscillator1.connect(audioContext.destination);
+    oscillator1.start();
+
+    setInterval(function() {
+      currentFrequencyIndex1 = (currentFrequencyIndex1 + 1) % frequencyArray1.length;
+      oscillator1.frequency.value = frequencyArray1[currentFrequencyIndex1];
+    }, incrementTime1);
+
+    // Oscillator 2
+    oscillator2.frequency.value = frequencyArray2[currentFrequencyIndex2];
+    oscillator2.type = "sine";
+    oscillator2.connect(audioContext.destination);
+    oscillator2.start();
+
+    setInterval(function() {
+      currentFrequencyIndex2 = (currentFrequencyIndex2 + 1) % frequencyArray2.length;
+      oscillator2.frequency.value = frequencyArray2[currentFrequencyIndex2];
+    }, incrementTime2);
+
+    // Oscillator 3
+    oscillator3.frequency.value = frequencyArray3[currentFrequencyIndex3];
+    oscillator3.type = "sine";
+    oscillator3.connect(audioContext.destination);
+    oscillator3.start();
+
+    setInterval(function() {
+      currentFrequencyIndex3 = (currentFrequencyIndex3 + 1) % frequencyArray3.length;
+      oscillator3.frequency.value = frequencyArray3[currentFrequencyIndex3];
+    }, incrementTime3);
+
+    // Oscillator 4
+    oscillator4.frequency.value = frequencyArray4[currentFrequencyIndex4];
+    oscillator4.type = "sine";
+    oscillator4.connect(audioContext.destination);
+    oscillator4.start();
+
+    setInterval(function() {
+      currentFrequencyIndex4 = (currentFrequencyIndex4 + 1) % frequencyArray4.length;
+      oscillator4.frequency.value = frequencyArray4[currentFrequencyIndex4];
+    }, incrementTime4);
+  });
+</script>
+</body>
+</html>

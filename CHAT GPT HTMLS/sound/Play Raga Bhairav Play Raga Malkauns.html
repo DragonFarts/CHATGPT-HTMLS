@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Raga Bhairav and Malkauns</title>
+</head>
+<body>
+    <button id="playBhairavButton" onclick="playRagaBhairav()">Play Raga Bhairav</button>
+    <button id="playMalkaunsButton" onclick="playRagaMalkauns()">Play Raga Malkauns</button>
+    <script>
+        // Create a new audio context
+        var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        var isPlaying = false;
+        var intervalId;
+        var noteIndex = 0;
+        var bhairavNotes = [220,246.94,196,165.3,146.83,110,98];
+        var bhairavNoteNames = ["Sa", "Re", "Ga", "Ma", "Pa", "Dha", "Ni"];
+        var malkaunsNotes = [261.63,293.66,329.63,392,493.88,587.33,698.46];
+        var malkaunsNoteNames = ["Sa", "Re", "Ga", "Ma", "Pa", "Dha", "Ni"];
+        
+        function playRagaBhairav() {
+            if(!isPlaying) {
+                isPlaying = true;
+                document.getElementById("playBhairavButton").innerHTML = "Stop Raga Bhairav";
+                document.getElementById("playMalkaunsButton").disabled = true;
+                intervalId = setInterval(playNote, 216);
+                playNote();
+            } else {
+                clearInterval(intervalId);
+                isPlaying = false;
+                document.getElementById("playBhairavButton").innerHTML = "Play Raga Bhairav";
+                document.getElementById("playMalkaunsButton").disabled = false;
+            }
+        }
+        
+        function playRagaMalkauns() {
+            if(!isPlaying) {
+                isPlaying = true;
+                document.getElementById("playMalkaunsButton").innerHTML = "Stop Raga Malkauns";
+                document.getElementById("playBhairavButton").disabled = true;
+                intervalId = setInterval(playNote, 216);
+                playNote();
+            } else {
+                clearInterval(intervalId);
+                isPlaying = false;
+                document.getElementById("playMalkaunsButton").innerHTML = "Play Raga Malkauns";
+                document.getElementById("playBhairavButton").disabled = false;
+            }
+        }
+
+        function playNote() {
+            // Create a new oscillator node
+            var oscillator = audioCtx.createOscillator();
+            // Set the oscillator type to sine wave
+            oscillator.type = 'sine';
+            // Set the frequency of the note
+            if(document.getElementById("playBhairavButton").innerHTML === "Stop Raga Bhairav"){
+                oscillator.frequency.value = bhairavNotes[noteIndex];
+            }
+            else {
+                oscillator.frequency.value = malkaunsNotes[noteIndex];
+            }
+            // Connect the oscillator to the audio context's destination
+            oscillator.connect(audioCtx.destination);
+            // Start the oscillator
+            oscillator.start();
+            // Stop the oscillator after 1.08 seconds
+            setTimeout(function () {
+                oscillator.stop();
+                oscillator.disconnect();
+                noteIndex++;
+                if(noteIndex === bhairavNotes.length) {
+                    noteIndex = 0;
+                }
+            }, 216);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<html>
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r115/three.min.js"></script>
+</head>
+<body>
+    <div id="container"></div>
+    <script>
+        // Create a scene
+        var scene = new THREE.Scene();
+
+        // Create a camera
+        var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+        camera.position.z = 5;
+
+        // Create a renderer
+        var renderer = new THREE.WebGLRenderer();
+        renderer.setSize( window.innerWidth, window.innerHeight );
+        document.getElementById("container").appendChild( renderer.domElement );
+
+        // Create a 2D shape (in this case, a square)
+        var geometry = new THREE.PlaneGeometry( 2, 2 );
+        var material = new THREE.MeshBasicMaterial( { color: 0xffffff } );
+        var square = new THREE.Mesh( geometry, material );
+
+        // Create an array to hold the squares
+        var squares = [];
+
+        // Create a spiral pattern of squares
+        for (var i = 0; i < 3333; i++) {
+            var angle = i * (Math.PI/4320);
+            var distance = i * 0.5;
+            var newSquare = square.clone();
+            newSquare.position.x = distance * Math.cos(angle)/2;
+            newSquare.position.y = distance * Math.sin(angle)/1.1;
+            newSquare.rotation.z = angle+1;
+            scene.add(newSquare);
+            squares.push(newSquare);
+            scene.add(newSquare);
+            squares.push(newSquare);
+        }
+        for (var i = 0; i < 212; i++) {
+            var angle = i * (Math.PI/4);
+            var distance = i * 0.;
+            var newSquare = square.clone();
+            newSquare.position.x = distance * Math.cos(angle)/1.2;
+            newSquare.position.y = distance * Math.sin(angle)/1.1;
+            newSquare.rotation.z = angle-1;
+            scene.add(newSquare);
+            squares.push(newSquare);
+            scene.add(newSquare);
+            squares.push(newSquare);
+        }
+
+        // Animate the spiral pattern
+        function animate() {
+            requestAnimationFrame( animate );
+
+            for (var i = 0; i < squares.length; i++) {
+                squares[i].rotation.x += -0.7;
+                squares[i].rotation.y += 0.1;
+            }
+
+            renderer.render( scene, camera );
+        }
+        animate();
+    </script>
+</body>
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Spin Button</title>
+</head>
+<body>
+  <div id="numbersContainer">
+    <span id="output1"></span>
+    <span id="output2"></span>
+    <span id="output3"></span>
+  </div>
+  <div id="credits">$108</div>
+  <button onclick="spin()">Spin</button>
+  <div id="result"></div>
+  <div id="colorResult"></div>
+  <div id="creditsAdded"></div>
+  <script>
+    var credits = 108;
+    var colors = ["red", "blue", "green", "yellow", "orange", "purple", "pink"];
+    function spin() {
+      var context = new (window.AudioContext || window.webkitAudioContext)();
+      var oscillator = context.createOscillator();
+      var gainNode = context.createGain();
+      gainNode.gain.value = 1;
+      oscillator.connect(gainNode);
+      gainNode.connect(context.destination);      
+      oscillator.frequency.value = 98;
+      oscillator.type = "sine";
+      oscillator.start();
+      setTimeout(function(){
+        oscillator.stop();
+      }, 108);
+      
+      var num1 = Math.floor(Math.random() * 10);
+      var color1 = colors[Math.floor(Math.random() * colors.length)];
+      document.getElementById("output1").innerHTML = num1;
+      document.getElementById("output1").style.color = color1;
+      
+      var num2 = Math.floor(Math.random() * 10);
+      var color2 = colors[Math.floor(Math.random() * colors.length)];
+      document.getElementById("output2").innerHTML = num2;
+      document.getElementById("output2").style.color = color2;
+      
+      var num3 = Math.floor(Math.random() * 10);
+      var color3 = colors[Math.floor(Math.random() * colors.length)];
+      document.getElementById("output3").innerHTML = num3;
+      document.getElementById("output3").style.color = color3;
+      
+      credits -= 1;
+      document.getElementById("credits").innerHTML = "$" + credits;
+      
+      var colorMultiplier = 1;
+      var colorBonus = 0;
+      if(color1 === color2 && color2 === color3) {
+        colorMultiplier = 911;
+        colorBonus = 911;
+        document.getElementById("colorResult").innerHTML = "Triple Color Bonus(911x)";
+      } else if(color1 === color2 || color1 === color3 || color2 === color3) {
+        colorMultiplier = 3;
+        colorBonus = 3;
+        document.getElementById("colorResult").innerHTML = "Double Color Bonus (3x)";
+      }
+      if(num1 === num2 && num2 === num3){
+        document.getElementById("result").innerHTML = "TRIPLE (911x)";
+        setTimeout(function(){
+          var oscillator2 = context.createOscillator();
+          var gainNode2 = context.createGain();
+          gainNode2.gain.value = 1;
+          oscillator2.connect(gainNode2);
+          gainNode2.connect(context.destination);
+          oscillator2.frequency.value = 144;
+          oscillator2.type = "sine";
+          oscillator2.start();
+          setTimeout(function(){
+            var oscillator3 = context.createOscillator();
+            var gainNode3 = context.createGain();
+            gainNode3.gain.value = 1;
+            oscillator3.connect(gainNode3);
+            gainNode3.connect(context.destination);
+            oscillator3.frequency.value = 216;
+            oscillator3.type = "sine";
+            oscillator3.start();
+            setTimeout(function(){
+              oscillator3.stop();
+            }, 200);
+            oscillator2.stop();
+          }, 200);
+          credits += 911 * colorMultiplier;
+          document.getElementById("credits").innerHTML = "$" + credits;
+          document.getElementById("creditsAdded").innerHTML = "Credits added: " + 911 * colorMultiplier;
+        }, 200);
+      }else if(num1 === num2 || num1 === num3 || num2 === num3){
+        document.getElementById("result").innerHTML = "DOUBLE (3x)";
+        setTimeout(function(){
+          var oscillator2 = context.createOscillator();
+          var gainNode2 = context.createGain();
+          gainNode2.gain.value = 1;
+          oscillator2.connect(gainNode2);
+          gainNode2.connect(context.destination);
+          oscillator2.frequency.value = 144;
+          oscillator2.type = "sine";
+          oscillator2.start();
+          setTimeout(function(){
+            oscillator2.stop();
+          }, 200);
+          credits += 3 * colorMultiplier;
+          document.getElementById("credits").innerHTML = "$" + credits;
+          document.getElementById("creditsAdded").innerHTML = "Credits added: " + 3 * colorMultiplier;
+        }, 200);
+      }else{
+        document.getElementById("result").innerHTML = "";
+        document.getElementById("colorResult").innerHTML = "";
+        document.getElementById("creditsAdded").innerHTML = "";
+      }
+    }
+  </script>
+</body>
+</html>

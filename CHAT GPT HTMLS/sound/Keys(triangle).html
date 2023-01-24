@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Triangle Wave Generator</title>
+</head>
+<body>
+
+<h1>Triangle Wave Generator</h1>
+
+<!-- Create 21 textboxes with a pattern starting at 21, 42, 63, 84, and so on -->
+<div id="textboxContainer">
+  <input type="text" id="textbox1" value="21">
+  <input type="text" id="textbox2" value="42">
+  <input type="text" id="textbox3" value="63">
+  <input type="text" id="textbox4" value="84">
+  <input type="text" id="textbox5" value="105">
+  <input type="text" id="textbox6" value="126">
+  <input type="text" id="textbox7" value="147">
+  <input type="text" id="textbox8" value="168">
+  <input type="text" id="textbox9" value="189">
+  <input type="text" id="textbox10" value="210">
+  <input type="text" id="textbox11" value="231">
+  <input type="text" id="textbox12" value="252">
+  <input type="text" id="textbox13" value="273">
+  <input type="text" id="textbox14" value="294">
+  <input type="text" id="textbox15" value="315">
+  <input type="text" id="textbox16" value="336">
+  <input type="text" id="textbox17" value="357">
+  <input type="text" id="textbox18" value="378">
+  <input type="text" id="textbox19" value="399">
+  <input type="text" id="textbox20" value="420">
+  <input type="text" id="textbox21" value="441">
+</div>
+
+<!-- Create a play button -->
+<button id="playButton">Play</button>
+
+<script>
+  // Initialize the Web Audio API
+  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+  // Create an oscillator node
+  const oscillator = audioCtx.createOscillator();
+  oscillator.type = 'triangle';
+  oscillator.frequency.value = 21; // set initial frequency to 21
+  oscillator.start();
+
+  // Connect the oscillator to the audio context's destination
+  oscillator.connect(audioCtx.destination);
+
+  // Bind keydown event on keyboard to change frequency of the sine wave
+  document.addEventListener('keydown', (event) => {
+    switch (event.key) {
+      case '1':
+        oscillator.frequency.value = document.getElementById("textbox1").value;
+        break;
+      case '2':
+        oscillator.frequency.value = document.getElementById("textbox2").value;
+        break;
+      case '3':
+        oscillator.frequency.value = document.getElementById("textbox3").value;
+        break;
+      case '4':
+        oscillator.frequency.value = document.getElementById("textbox4").value;
+        break;
+      case '5':
+        oscillator.frequency.value = document.getElementById("textbox5").value;
+        break;
+      case '6':
+        oscillator.frequency.value = document.getElementById("textbox6").value;
+        break;
+      case '7':
+        oscillator.frequency.value = document.getElementById("textbox7").value;
+        break;
+      case '8':
+        oscillator.frequency.value = document.getElementById("textbox8").value;
+        break;
+      case '9':
+        oscillator.frequency.value = document.getElementById("textbox9").value;
+        break;
+      case '0':
+        oscillator.frequency.value = document.getElementById("textbox10").value;
+        break;
+      case 'q':
+        oscillator.frequency.value = document.getElementById("textbox11").value;
+        break;
+      case 'w':
+        oscillator.frequency.value = document.getElementById("textbox12").value;
+        break;
+      case 'e':
+        oscillator.frequency.value = document.getElementById("textbox13").value;
+        break;
+      case 'r':
+        oscillator.frequency.value = document.getElementById("textbox14").value;
+        break;
+      case 't':
+        oscillator.frequency.value = document.getElementById("textbox15").value;
+        break;
+      case 'y':
+        oscillator.frequency.value = document.getElementById("textbox16").value;
+        break;
+      case 'u':
+        oscillator.frequency.value = document.getElementById("textbox17").value;
+        break;
+      case 'i':
+        oscillator.frequency.value = document.getElementById("textbox18").value;
+        break;
+      case 'o':
+        oscillator.frequency.value = document.getElementById("textbox19").value;
+        break;
+      case 'p':
+        oscillator.frequency.value = document.getElementById("textbox20").value;
+        break;
+    }
+  });
+
+  // Bind click event on play button to start the sine wave
+  document.getElementById("playButton").addEventListener("click", () => {
+    oscillator.start();
+  });
+
+</script>
+
+</body>
+</html>

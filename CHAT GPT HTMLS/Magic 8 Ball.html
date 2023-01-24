@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script>
+      var context, oscillator;
+      function startOscillator() {
+        context = new (window.AudioContext || window.webkitAudioContext)();
+        oscillator = context.createOscillator();
+        oscillator.type = 'sine';
+        oscillator.frequency.setValueAtTime(44, context.currentTime); // start frequency
+        oscillator.frequency.exponentialRampToValueAtTime(88, context.currentTime + 0.005); // ramp up to 880 Hz over 1 second
+        oscillator.frequency.exponentialRampToValueAtTime(108, context.currentTime + 0.1); // ramp up to 300 Hz over 0.1 seconds
+        oscillator.frequency.exponentialRampToValueAtTime(45, context.currentTime + 0.2); // ramp up to 600 Hz over 0.1 seconds
+        oscillator.frequency.exponentialRampToValueAtTime(144, context.currentTime + 0.3); // ramp down to 400 Hz over 0.1 seconds
+        oscillator.frequency.exponentialRampToValueAtTime(216, context.currentTime + 0.4); // ramp up to 800 Hz over 0.1 seconds
+        oscillator.frequency.exponentialRampToValueAtTime(54, context.currentTime + 0.5); // ramp down to 200 Hz over 0.1 seconds
+        oscillator.frequency.exponentialRampToValueAtTime(33, context.currentTime + 0.6); // ramp up to 800 Hz over 0.1 seconds
+        oscillator.frequency.exponentialRampToValueAtTime(108, context.currentTime + 0.7); // ramp down to 400 Hz over 0.1 seconds
+        oscillator.frequency.exponentialRampToValueAtTime(98, context.currentTime + 0.8); // ramp up to 600 Hz over 0.1 seconds
+        oscillator.frequency.exponentialRampToValueAtTime(10, context.currentTime + 0.9); // ramp down to 300 Hz over 0.1 seconds
+        oscillator.connect(context.destination);
+        oscillator.start();
+        setTimeout(function(){ oscillator.stop() }, 1000);
+      }
+      
+      function magic8Ball() {
+        var responses = ["It is certain", "It is decidedly so", "Without a doubt", "Yes - definitely", "You may rely on it", "As I see it, yes", "Most likely", "Outlook good", "Yes", "Signs point to yes", "Reply hazy, try again", "Ask again later", "Better not tell you now", "Cannot predict now", "Concentrate and ask again", "Don't count on it", "My reply is no", "My sources say no", "Outlook not so good", "Very doubtful"];
+        var response = responses[Math.floor(Math.random() * responses.length)];
+        document.getElementById("magic8ball").innerHTML = response;
+        startOscillator();
+      }
+    </script>
+  </head>
+  <body>
+    <button onclick="magic8Ball()">Shake the Magic 8 Ball</button>
+    <p id="magic8ball"></p>
+  </body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script>
+    var context;
+    var leftOsc, rightOsc;
+    var leftGain, rightGain;
+    var leftFreq = 27;
+    var rightFreq = 32;
+    var intervalId;
+
+    function setup() {
+      // create an audio context
+      context = new (window.AudioContext || window.webkitAudioContext)();
+
+      // create oscillators and gain nodes
+      leftOsc = context.createOscillator();
+      rightOsc = context.createOscillator();
+      leftGain = context.createGain();
+      rightGain = context.createGain();
+
+      // set oscillator type and frequency
+      leftOsc.type = 'sine';
+      leftOsc.frequency.value = leftFreq;
+      rightOsc.type = 'sine';
+      rightOsc.frequency.value = rightFreq;
+
+      // connect oscillators to gain nodes
+      leftOsc.connect(leftGain);
+      rightOsc.connect(rightGain);
+
+      // connect gain nodes to the audio context's destination
+      leftGain.connect(context.destination);
+      rightGain.connect(context.destination);
+    }
+
+    function play() {
+      // start oscillators
+      leftOsc.start();
+      rightOsc.start();
+
+      // increase frequency of oscillators every 0.25 seconds
+      intervalId = setInterval(function() {
+        leftFreq+= 0.01;
+        rightFreq+= 0.01;
+        leftOsc.frequency.value = leftFreq;
+        rightOsc.frequency.value = rightFreq;
+        document.getElementById("left-freq").innerHTML = "Left frequency: " + leftFreq;
+        document.getElementById("right-freq").innerHTML = "Right frequency: " + rightFreq;
+      }, 25);
+    }
+
+    function stop() {
+      // stop oscillators
+      leftOsc.stop();
+      rightOsc.stop();
+      clearInterval(intervalId);
+    }
+
+    window.onload = setup;
+  </script>
+</head>
+<body>
+  <button onclick="play()">Play</button>
+  <button onclick="stop()">Stop</button>
+  <div id="left-freq"></div>
+  <div id="right-freq"></div>
+</body>
+</html>

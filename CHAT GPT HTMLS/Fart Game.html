@@ -1,0 +1,146 @@
+<html>
+<head>
+    <title>Fart Game</title>
+    <style>
+        .container {
+            width: 432px;
+            height: 540px;
+            border: 10px solid black;
+            padding: 20px;
+            background-color: #f4e4d8;
+            text-align: center;
+        }
+        .item {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <audio id="audio"></audio>
+    <div class="container">
+        <h1>Fart Game</h1>
+        <div class="item">
+            <h2>Day <span id="day">0</span></h2>
+            <p>A game about buying and selling fart before you shit your pants</p>
+        </div>
+        <div class="item">
+            <h2>Todays Fart Price:</h2>
+            <p id="fart-price"></p>
+        </div>
+        <div class="item">
+            <h2>:~~~~:</h2>
+            <button onclick="buyFart()">Buy Fart</button>
+            <button onclick="sellFart()">Sell Fart</button>
+            <button onclick="buy21Farts()">Buy 108 Farts</button>
+            <button onclick="sell21Farts()">Sell 108 Farts</button>
+            <button onclick="
+  var audio = document.getElementById('audio');
+  audio.src='https://wavlist.com/wav/mphg-sorry.wav'; 
+  audio.volume = 0.5;
+  audio.playbackRate = (Math.random() * (5 - 0.5) + 0.5);
+  audio.play(); 
+  nextDay();
+">Next Day</button>
+            <button onclick="
+  var audio = new Audio();
+  audio.src = 'https://wavlist.com/wav/mphg-sorry.wav';
+  audio.volume = 0.5;
+  var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  var source = audioCtx.createMediaElementSource(audio);
+  var pitchShifter = audioCtx.createPitchShifter();
+  var randomPitch = Math.random()* 2 -1;
+  pitchShifter.detune.value = randomPitch * 100;
+  source.connect(pitchShifter);
+  pitchShifter.connect(audioCtx.destination);
+  audio.play();
+  nextDay();
+">Next Day</button>
+        </div>
+        <div class="item">
+            <h2>Farts:</h2>
+            <p id="farts">0</p>
+        </div>
+        <div class="item">
+            <h2>Money:</h2>
+            <p id="money">$420</p>
+        </div>
+        <div class="item">
+            <p id="dialog"></p>
+        </div>
+    </div>
+    <script>
+        let farts = 0;
+        let money = 420;
+        let day = 0;
+        let currentPrice = 666;
+        let dialogs = [
+            "That fart is a rip off! get it?",
+            "Someones been cutting the farts with queefs and selling it for dirt cheap",
+            "You can't fake a good fart, it's either the real deal or it's just hot air.",
+            "That fart is worth its weight in beans!",
+            "Pull My Finger for a Sale pull My Tail for stank Mail",
+            "I wouldn't pay a dime for that fart, it's gone stale.",
+            "I have a nose for quality farts, and that one is top-notch.",
+            "Farts R in, Let yours Out!",
+            "Farts are going stale, Buy Quick",
+            "I'm afraid that fart has reached its expiration date."
+        ];
+
+        function buyFart() {
+            if (money >= currentPrice) {
+                money -= currentPrice;
+                farts++;
+                document.getElementById('money').innerHTML = "$" + money.toFixed(2);
+                document.getElementById('farts').innerHTML = farts;
+                document.getElementById('dialog').innerHTML = dialogs[Math.floor(Math.random() * dialogs.length)];
+            } else {
+                document.getElementById('dialog').innerHTML = dialogs[8];
+            }
+        }
+
+        function sellFart() {
+            if (farts > 0) {
+                money += currentPrice;
+                farts--;
+                document.getElementById('money').innerHTML = "$" + money.toFixed(2);
+                document.getElementById('farts').innerHTML = farts;
+                document.getElementById('dialog').innerHTML = dialogs[Math.floor(Math.random() * dialogs.length)];
+            } else {
+                document.getElementById('dialog').innerHTML = "No farts to sell!";
+            }
+        }
+
+        function buy21Farts() {
+            if (money >= currentPrice * 108) {
+                money -= currentPrice * 108;
+                farts += 108;
+                document.getElementById('money').innerHTML = "$" + money.toFixed(2);
+                document.getElementById('farts').innerHTML = farts;
+                document.getElementById('dialog').innerHTML = dialogs[Math.floor(Math.random() * dialogs.length)];
+            } else {
+                document.getElementById('dialog').innerHTML = dialogs[8];
+            }
+        }
+
+        function sell21Farts() {
+            if (farts >= 108) {
+                money += currentPrice * 108;
+                farts -= 108;
+                document.getElementById('money').innerHTML = "$" + money.toFixed(2);
+                document.getElementById('farts').innerHTML = farts;
+                document.getElementById('dialog').innerHTML = dialogs[Math.floor(Math.random() * dialogs.length)];
+            } else {
+                document.getElementById('dialog').innerHTML = "Not enough farts to sell 21!";
+            }
+        }
+
+        function nextDay() {
+            day++;
+            currentPrice = Math.random() * 108;
+            document.getElementById('day').innerHTML = day;
+            document.getElementById('fart-price').innerHTML = "$" + currentPrice.toFixed(2);
+            document.getElementById('dialog').innerHTML = "On to the next day!";
+        }
+    </script>
+</body>
+</html>

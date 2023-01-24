@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <button id="play-button">Play</button>
+    <input type="number" id="frequency-input" value="108">
+    <input type="number" id="duration-input" value="1.08">
+    <input type="number" id="interval-input" value="2">
+    <script>
+      var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      var playButton = document.getElementById("play-button");
+      var frequencyInput = document.getElementById("frequency-input");
+      var durationInput = document.getElementById("duration-input");
+      var intervalInput = document.getElementById("interval-input");
+      var currentOscillator;
+      var currentGainNode;
+      
+      playButton.onclick = function() {
+        if(currentOscillator && currentGainNode) {
+            currentGainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+            currentOscillator.stop();
+        }
+        currentOscillator = audioCtx.createOscillator();
+        currentGainNode = audioCtx.createGain();
+        currentOscillator.frequency.value = frequencyInput.value;
+        currentGainNode.gain.setValueAtTime(1, audioCtx.currentTime);
+        currentOscillator.start();
+        currentGainNode.connect(audioCtx.destination);
+        currentOscillator.connect(currentGainNode);
+        setTimeout(() => {
+            currentGainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+            currentOscillator.stop();
+        }, durationInput.value * 1000);
+        setInterval(() => {
+            playButton.onclick();
+        }, intervalInput.value * 1000);
+      };
+    </script>
+  </body>
+</html>

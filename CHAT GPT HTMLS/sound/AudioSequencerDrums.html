@@ -1,0 +1,122 @@
+<html>
+  <head>
+    <title>Audio Looper</title>
+  </head>
+  <body>
+    <audio id="audio1" src="https://wavlist.com/wav/drum_bass.wav"></audio>
+    <audio id="audio2" src="https://wavlist.com/wav/drum_snare2.wav"></audio>
+    <audio id="audio3" src="https://wavlist.com/wav/tomtom_hi.wav"></audio>
+    <audio id="audio4" src="https://wavlist.com/wav/drum_stick.wav"></audio>
+    <audio id="audio5" src="https://wavlist.com/wav/cymbal2.wav"></audio>
+    <br>
+    <input type="text" id="sequence1" name="sequence1" value="1 0 1 0 1 0 1 0">
+    <label for="sequence1">KICK:</label>
+    <br>
+    <input type="text" id="sequence2" name="sequence2" value="0 1 0 1 0 1 0 1">
+    <label for="sequence2">SNARE:</label>
+    <br>
+    <input type="text" id="sequence3" name="sequence3" value="1 1 1 1 1 1 1 1">
+    <label for="sequence3">TOMTOM:</label>
+    <br>
+    <input type="text" id="sequence4" name="sequence4" value="1 1 0 0 1 1 0 0">
+    <label for="sequence4">STICK:</label>
+    <br>
+    <input type="text" id="sequence5" name="sequence5" value="0 1 0 1 1 1 0 1">
+    <label for="sequence5">CRASH:</label>
+    <br>
+    <label for="interval">Interval (ms):</label>
+    <input type="text" id="interval" name="interval" value="125">
+    <br>
+    <button onclick="playLoop()">Play</button>
+    <script>
+      var i = 0;
+      var loadCount = 0;
+      var seqArr1;
+      var seqArr2;
+      var seqArr3;
+      var seqArr4;
+      var seqArr5;
+      var interval;
+      var audio1 = document.getElementById("audio1");
+      var audio2 = document.getElementById("audio2");
+      var audio3 = document.getElementById("audio3");
+      var audio4 = document.getElementById("audio4");
+      var audio5 = document.getElementById("audio5");
+  
+      function playLoop() {
+        var sequence1 = document.getElementById("sequence1").value;
+        var sequence2 = document.getElementById("sequence2").value;
+        var sequence3 = document.getElementById("sequence3").value;
+        var sequence4 = document.getElementById("sequence4").value;
+        var sequence5 = document.getElementById("sequence5").value;
+        interval = document.getElementById("interval").value;
+        seqArr1 = sequence1.split(" ");
+        seqArr2 = sequence2.split(" ");
+        seqArr3 = sequence3.split(" ");
+        seqArr4 = sequence4.split(" ");
+        seqArr5 = sequence5.split(" ");
+        i = 0;
+        loadCount = 0;
+        audio1.load();
+        audio2.load();
+        audio3.load();
+        audio4.load();
+        audio5.load();
+        audio1.addEventListener("canplay", function() {
+          loadCount++;
+          if (loadCount === 5) {
+            playAudio();
+          }
+        });
+        audio2.addEventListener("canplay", function() {
+          loadCount++;
+          if (loadCount === 5) {
+            playAudio();
+          }
+        });
+        audio3.addEventListener("canplay", function() {
+          loadCount++;
+          if (loadCount === 5) {
+            playAudio();
+          }
+        });
+        audio4.addEventListener("canplay", function() {
+          loadCount++;
+          if (loadCount === 5) {
+            playAudio();
+          }
+        });
+        audio5.addEventListener("canplay", function() {
+          loadCount++;
+          if (loadCount === 5) {
+            playAudio();
+          }
+        });
+      }
+      function playAudio() {
+        if (seqArr1[i] == 1) {
+          audio1.currentTime = 0;
+          audio1.play();
+        }
+        if (seqArr2[i] == 1) {
+          audio2.currentTime = 0;
+          audio2.play();
+        }
+        if (seqArr3[i] == 1) {
+          audio3.currentTime = 0;
+          audio3.play();
+        }
+        if (seqArr4[i] == 1) {
+          audio4.currentTime = 0;
+          audio4.play();
+        }
+        if (seqArr5[i] == 1) {
+          audio5.currentTime = 0;
+          audio5.play();
+        }
+        i = (i + 1) % seqArr1.length;
+        setTimeout(playAudio, interval);
+      }
+    </script>
+  </body>
+</html>

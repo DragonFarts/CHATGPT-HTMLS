@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Web Audio API</title>
+    <script>
+        window.onload = () => {
+            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+            // AnalyserNode to measure the frequency
+            const analyser = audioCtx.createAnalyser();
+
+            // To capture the keyboard events
+            document.addEventListener('keydown', playSound);
+
+            function playSound(e) {
+                // Only play audio if the key pressed is between 1-6
+                if (e.keyCode >= 49 && e.keyCode <= 54) {
+                    // Frequency of the OscillatorNode
+                    let frequency = 0;
+
+                    // Set the frequency based on the key pressed
+                    switch (e.keyCode) {
+                        case 49:
+                            frequency = 440;
+                            break;
+                        case 50:
+                            frequency = 493.88;
+                            break;
+                        case 51:
+                            frequency = 523.25;
+                            break;
+                        case 52:
+                            frequency = 587.33;
+                            break;
+                        case 53:
+                            frequency = 659.25;
+                            break;
+                        case 54:
+                            frequency = 698.46;
+                            break;
+                    }
+
+                    // Create the OscillatorNode
+                    const oscillator = audioCtx.createOscillator();
+
+                    // Set the frequency of the OscillatorNode
+                    oscillator.frequency.value = frequency;
+
+                    // Connect the OscillatorNode to the AnalyserNode
+                    oscillator.connect(analyser);
+                    // Connect the AnalyserNode to the AudioContext's destination
+                    analyser.connect(audioCtx.destination);
+
+                    // Start the oscillator
+                    oscillator.start(audioCtx.currentTime);
+
+                    // Stop the oscillator after 0.5 seconds
+                    oscillator.stop(audioCtx.currentTime + 0.5);
+                }
+
+                // Only play audio if the key pressed is 7
+                if (e.keyCode === 55){
+                    // Frequency of the OscillatorNode
+                    let frequency = 0;
+
+                    // Set the frequency
+                    frequency = 783.99;
+
+                    // Create the OscillatorNode
+                    const oscillator = audioCtx.createOscillator();
+
+                    // Set the frequency of the OscillatorNode
+                    oscillator.frequency.value = frequency;
+
+                    // Connect the OscillatorNode to the AnalyserNode
+                    oscillator.connect(analyser);
+                    // Connect the AnalyserNode to the AudioContext's destination
+                    analyser.connect(audioCtx.destination);
+
+                    // Start the oscillator
+                    oscillator.start(audioCtx.currentTime);
+
+                    // Stop the oscillator after 0.5 seconds
+                    oscillator.stop(audioCtx.currentTime + 0.5);
+                }
+
+                // Only play audio if the key pressed is 8
+                if (e.keyCode === 56){
+                    // Frequency of the OscillatorNode
+                    let frequency = 0;
+
+                    // Set the frequency
+                    frequency = 880.00;
+
+                    // Create the OscillatorNode
+                    const oscillator = audioCtx.createOscillator();
+
+                    // Set the frequency of the OscillatorNode
+                    oscillator.frequency.value = frequency;
+
+                    // Connect the OscillatorNode to the AnalyserNode
+                    oscillator.connect(analyser);
+                    // Connect the AnalyserNode to the AudioContext's destination
+                    analyser.connect(audioCtx.destination);
+
+                    // Start the oscillator
+                    oscillator.start(audioCtx.currentTime);
+
+                    // Stop the oscillator after 0.5 seconds
+                    oscillator.stop(audioCtx.currentTime + 0.5);
+                }
+
+                // Only play audio if the key pressed is 9
+                if (e.keyCode === 57){
+                    // Frequency of the OscillatorNode
+                    let frequency = 0;
+
+                    // Set the frequency
+                    frequency = 987.77;
+
+                    // Create the OscillatorNode
+                    const oscillator = audioCtx.createOscillator();
+
+                    // Set the frequency of the OscillatorNode
+                    oscillator.frequency.value = frequency;
+
+                    // Connect the OscillatorNode to the AnalyserNode
+                    oscillator.connect(analyser);
+                    // Connect the AnalyserNode to the AudioContext's destination
+                    analyser.connect(audioCtx.destination);
+
+                    // Start the oscillator
+                    oscillator.start(audioCtx.currentTime);
+
+                    // Stop the oscillator after 0.5 seconds
+                    oscillator.stop(audioCtx.currentTime + 0.5);
+                }
+
+                // Only play audio if the key pressed is 0
+                if (e.keyCode === 48){
+                    // Frequency of the OscillatorNode
+                    let frequency = 0;
+
+                    // Set the frequency
+                    frequency = 1046.50;
+
+                    // Create the OscillatorNode
+                    const oscillator = audioCtx.createOscillator();
+
+                    // Set the frequency of the OscillatorNode
+                    oscillator.frequency.value = frequency;
+
+                    // Connect the OscillatorNode to the AnalyserNode
+                    oscillator.connect(analyser);
+                    // Connect the AnalyserNode to the AudioContext's destination
+                    analyser.connect(audioCtx.destination);
+
+                    // Start the oscillator
+                    oscillator.start(audioCtx.currentTime);
+
+                    // Stop the oscillator after 0.5 seconds
+                    oscillator.stop(audioCtx.currentTime + 0.5);
+                }
+
+                // Only play audio if the key pressed is Q
+                if (e.keyCode === 81){
+                    // Frequency of the OscillatorNode
+                    let frequency = 0;
+
+                    // Set the frequency
+                    frequency = 54.00;
+
+                    // Create the OscillatorNode
+                    const oscillator = audioCtx.createOscillator();
+
+                    // Set the frequency of the OscillatorNode
+                    oscillator.frequency.value = frequency;
+
+                    // Connect the OscillatorNode to the AnalyserNode
+                    oscillator.connect(analyser);
+                    // Connect the AnalyserNode to the AudioContext's destination
+                    analyser.connect(audioCtx.destination);
+
+                    // Start the oscillator
+                    oscillator.start(audioCtx.currentTime);
+
+                    // Stop the oscillator after 0.5 seconds
+                    oscillator.stop(audioCtx.currentTime + 0.5);
+                }
+
+                // Only play audio if the key pressed is W
+                if (e.keyCode === 87){
+                    // Frequency of the OscillatorNode
+                    let frequency = 0;
+
+                    // Set the frequency
+                    frequency = 66.00;
+
+                    // Create the OscillatorNode
+                    const oscillator = audioCtx.createOscillator();
+
+                    // Set the frequency of the OscillatorNode
+                    oscillator.frequency.value = frequency;
+
+                    // Connect the OscillatorNode to the AnalyserNode
+                    oscillator.connect(analyser);
+                    // Connect the AnalyserNode to the AudioContext's destination
+                    analyser.connect(audioCtx.destination);
+
+                    // Start the oscillator
+                    oscillator.start(audioCtx.currentTime);
+
+                    // Stop the oscillator after 0.5 seconds
+                    oscillator.stop(audioCtx.currentTime + 0.5);
+                }
+
+                // Only play audio if the key pressed is E
+                if (e.keyCode === 69){
+                    // Frequency of the OscillatorNode
+                    let frequency = 0;
+
+                    // Set the frequency
+                    frequency = 72.00;
+
+                    // Create the OscillatorNode
+                    const oscillator = audioCtx.createOscillator();
+
+                    // Set the frequency of the OscillatorNode
+                    oscillator.frequency.value = frequency;
+
+                    // Connect the OscillatorNode to the AnalyserNode
+                    oscillator.connect(analyser);
+                    // Connect the AnalyserNode to the AudioContext's destination
+                    analyser.connect(audioCtx.destination);
+
+                    // Start the oscillator
+                    oscillator.start(audioCtx.currentTime);
+
+                    // Stop the oscillator after 0.5 seconds
+                    oscillator.stop(audioCtx.currentTime + 0.5);
+                }
+
+                // Only play audio if the key pressed is R
+                if (e.keyCode === 82){
+                    // Frequency of the OscillatorNode
+                    let frequency = 0;
+
+                    // Set the frequency
+                    frequency = 84.00;
+
+                    // Create the OscillatorNode
+                    const oscillator = audioCtx.createOscillator();
+
+                    // Set the frequency of the OscillatorNode
+                    oscillator.frequency.value = frequency;
+
+                    // Connect the OscillatorNode to the AnalyserNode
+                    oscillator.connect(analyser);
+                    // Connect the AnalyserNode to the AudioContext's destination
+                    analyser.connect(audioCtx.destination);
+
+                    // Start the oscillator
+                    oscillator.start(audioCtx.currentTime);
+
+                    // Stop the oscillator after 0.5 seconds
+                    oscillator.stop(audioCtx.currentTime + 0.5);
+                }
+
+                // Only play audio if the key pressed is T
+                if (e.keyCode === 84){
+                    // Frequency of the OscillatorNode
+                    let frequency = 0;
+
+                    // Set the frequency
+                    frequency = 91.00;
+
+                    // Create the OscillatorNode
+                    const oscillator = audioCtx.createOscillator();
+
+                    // Set the frequency of the OscillatorNode
+                    oscillator.frequency.value = frequency;
+
+                    // Connect the OscillatorNode to the AnalyserNode
+                    oscillator.connect(analyser);
+                    // Connect the AnalyserNode to the AudioContext's destination
+                    analyser.connect(audioCtx.destination);
+
+                    // Start the oscillator
+                    oscillator.start(audioCtx.currentTime);
+
+                    // Stop the oscillator after 0.5 seconds
+                    oscillator.stop(audioCtx.currentTime + 0.5);
+                }
+
+                // Only play audio if the key pressed is Y
+                if (e.keyCode === 89){
+                    // Frequency of the OscillatorNode
+                    let frequency = 0;
+
+                    // Set the frequency
+                    frequency = 108.00;
+
+                    // Create the OscillatorNode
+                    const oscillator = audioCtx.createOscillator();
+
+                    // Set the frequency of the OscillatorNode
+                    oscillator.frequency.value = frequency;
+
+                    // Connect the OscillatorNode to the AnalyserNode
+                    oscillator.connect(analyser);
+                    // Connect the AnalyserNode to the AudioContext's destination
+                    analyser.connect(audioCtx.destination);
+
+                    // Start the oscillator
+                    oscillator.start(audioCtx.currentTime);
+
+                    // Stop the oscillator after 0.5 seconds
+                    oscillator.stop(audioCtx.currentTime + 0.5);
+                }
+
+                // Only play audio if the key pressed is U
+                if (e.keyCode === 85){
+                    // Frequency of the OscillatorNode
+                    let frequency = 0;
+
+                    // Set the frequency
+                    frequency = 120.00;
+
+                    // Create the OscillatorNode
+                    const oscillator = audioCtx.createOscillator();
+
+                    // Set the frequency of the OscillatorNode
+                    oscillator.frequency.value = frequency;
+
+                    // Connect the OscillatorNode to the AnalyserNode
+                    oscillator.connect(analyser);
+                    // Connect the AnalyserNode to the AudioContext's destination
+                    analyser.connect(audioCtx.destination);
+
+                    // Start the oscillator
+                    oscillator.start(audioCtx.currentTime);
+
+                    // Stop the oscillator after 0.5 seconds
+                    oscillator.stop(audioCtx.currentTime + 0.5);
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Web Audio API</h1>
+    <p>Press the keys 1-6, 7-9, 0, Q, W, E, R, T, Y, U on the keyboard to generate audio.</p>
+</body>
+</html>

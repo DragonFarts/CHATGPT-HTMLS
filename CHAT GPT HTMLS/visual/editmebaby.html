@@ -1,0 +1,72 @@
+<html>
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r121/three.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: black;
+        }
+    </style>
+</head>
+
+<body>
+    <script>
+        var scene, camera, renderer;
+        var squares = [];
+        var colors = [0xff0000, 0x00ff00, 0x0000ff, 0xffff00, 0xff00ff, 0x00ffff, 0xffffff];
+
+        init();
+        animate();
+
+        function init() {
+            scene = new THREE.Scene();
+            var aspect = window.innerWidth / window.innerHeight;
+            camera = new THREE.PerspectiveCamera(75, aspect, 0.1, 10000);
+            camera.position.set(0, 0, 100);
+            camera.lookAt(0, 0, 0);
+            var light = new THREE.PointLight(0xffffff, 1);
+            light.position.set(0, 0, 100);
+            scene.add(light);
+            var spiralStep = 0.1;
+            for (var i = 0; i < 1000; i++) {
+                var geometry = new THREE.BoxGeometry(2, 88, 2);
+                var material = new THREE.MeshLambertMaterial({
+                    color: colors[i % colors.length]
+                });
+                var square = new THREE.Mesh(geometry, material);
+                square.position.set(
+                    (i * spiralStep) * Math.cos(i * spiralStep),
+                    (i * spiralStep) * Math.sin(i * spiralStep),
+                    i * spiralStep
+                );
+                squares.push(square);
+                scene.add(square);
+            }
+            renderer = new THREE.WebGLRenderer();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            document.body.appendChild(renderer.domElement);
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            for (var i = 0; i < squares.length; i++) {
+                squares[i].position.x -= 0.05/1.08+0.003;
+                squares[i].position.y -= 0.0432/1.08;
+                squares[i].position.z -= 0.333;
+                squares[i].rotation.x += 0.01;
+                squares[i].rotation.y += 0.0108;
+            }
+            renderer.render(scene, camera);
+        }
+        window.addEventListener("resize", onWindowResize, false);
+
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+    </script>
+    <canvas width="779" height="937" style="width: 779px; height: 937px;"></canvas>
+</body>
+</html>

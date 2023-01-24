@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Kick Drum Sound Generator</title>
+</head>
+<body>
+  <button id="play-button">Play Kick Drum</button>
+  <script>
+    // Get the button element
+    var playButton = document.getElementById("play-button");
+
+    // Create an audio context
+    var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+    // Create oscillators for sine wave and square wave
+    var sineOsc = audioCtx.createOscillator();
+    var squareOsc = audioCtx.createOscillator();
+
+    // Set the waveform type for each oscillator
+    sineOsc.type = "sine";
+    squareOsc.type = "square";
+
+    // Set the frequency for each oscillator
+    sineOsc.frequency.value = 108;
+    squareOsc.frequency.value = 108;
+
+    // Create a gain node
+    var gainNode = audioCtx.createGain();
+
+    // Connect the oscillators to the gain node
+    sineOsc.connect(gainNode);
+    squareOsc.connect(gainNode);
+
+    // Connect the gain node to the audio context destination
+    gainNode.connect(audioCtx.destination);
+
+    // Set the gain value for the gain node
+    gainNode.gain.value = 2;
+
+    // Calculate the duration of the sound using a formula
+    var now = audioCtx.currentTime;
+    var soundDuration = 1; // 50ms
+    var attack = 0.01;
+    var decay = 0.144;
+    var release = 0.1;
+
+    // Play the sound when the button is clicked
+    playButton.onclick = function() {
+      sineOsc.start(now);
+      squareOsc.start(now);
+
+      gainNode.gain.setValueAtTime(0, now);
+      gainNode.gain.linearRampToValueAtTime(1, now + attack);
+      gainNode.gain.exponentialRampToValueAtTime(0.0001, now + attack + decay + release);
+
+      sineOsc.stop(now + attack + decay + release);
+      squareOsc.stop(now + attack + decay + release);
+    };
+  </script>
+</body>
+</html>

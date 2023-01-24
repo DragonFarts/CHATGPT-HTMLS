@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            background-color: black;
+        }
+        .bouncing-text, #cat, #mouse {
+            color: white;
+            position: absolute;
+            font-size: 36px;
+        }
+        #cat {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            white-space: pre;
+            animation: catMove 4s infinite ease-in-out;
+        }
+        @keyframes catMove {
+            from {
+                left: 0;
+            }
+            to {
+                left: 100%;
+            }
+        }
+        #cheese {
+            position: absolute;
+            color: yellow;
+            white-space: pre;
+            visibility: hidden;
+        }
+        #mouse {
+            position: absolute;
+            color: gray;
+            white-space: pre;
+            animation: mouseMove 4s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body>
+    <div class="bouncing-text">Howdy Partner! :-)</div>
+    <div id="cat">
+        /\_/\
+        ( o.o ) 
+        > ^ <
+    </div>
+    <div id="cheese">
+        /\  
+       / o \ 
+      / . o .
+    </div>
+    <div id="mouse">
+        .-'"'-.
+       /      \
+       |      |
+       |      |
+       | 0  0 |
+       |   ^  |
+       | \___/
+        \_____/
+    </div>
+    <script>
+        const text = document.querySelector('.bouncing-text');
+        const cheese = document.getElementById("cheese");
+        const cat = document.getElementById("cat");
+        const mouse = document.getElementById("mouse");
+        let x = 0, y = 0;
+        let xSpeed = 5, ySpeed = 5;
+        
+        window.addEventListener("click", function(e) {
+            cheese.style.left = e.clientX - cheese.getBoundingClientRect().width / 2 + 'px';
+            cheese.style.top = e.clientY - cheese.getBoundingClientRect().height / 2 + 'px';
+            cheese.style.visibility = "visible";
+        });
+        function animateText() {
+            x += xSpeed;
+            y += ySpeed;
+            if (x + text.getBoundingClientRect().width > window.innerWidth || x < 0) {
+                xSpeed = -xSpeed;
+            }
+            if (y + text.getBoundingClientRect().height > window.innerHeight || y < 0) {
+                ySpeed = -ySpeed
+;
+            }
+            text.style.left = x + 'px';
+            text.style.top = y + 'px';
+            requestAnimationFrame(animateText);
+        }
+        animateText();
+        
+        function getRandomPosition(element) {
+            var x = document.body.offsetHeight-element.clientHeight;
+            var y = document.body.offsetWidth-element.clientWidth;
+            var randomX = Math.floor(Math.random()*x);
+            var randomY = Math.floor(Math.random()*y);
+            return [randomX,randomY];
+        }
+        var randomPosition = getRandomPosition(mouse);
+        mouse.style.top = randomPosition[0] + 'px';
+        mouse.style.left = randomPosition[1] + 'px';
+        
+        var catRect = cat.getBoundingClientRect();
+        var mouseRect = mouse.getBoundingClientRect();
+        
+        function mouseMove() {
+            mouseRect = mouse.getBoundingClientRect();
+            if (mouseRect.left + mouseRect.width < 0) {
+                var randomPosition = getRandomPosition(mouse);
+                mouse.style.top = randomPosition[0] + 'px';
+                mouse.style.left = window.innerWidth + 'px';
+            }
+            mouse.style.left = mouseRect.left - catRect.width + 'px';
+        }
+        setInterval(mouseMove, 50);
+    </script>
+</body>
+</html>

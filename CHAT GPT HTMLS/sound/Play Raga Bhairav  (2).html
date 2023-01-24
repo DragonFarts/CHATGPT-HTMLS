@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sitar Raga Bhairav</title>
+</head>
+<body>
+    <button id="playButton" onclick="playSound()">Play Raga Bhairav</button>
+    <script>
+        // Create a new audio context
+        var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        var isPlaying = false;
+        var intervalId;
+        var noteIndex = 0;
+        var notes = [220,246.94,196,165.3,146.83,110,98];
+        var noteNames = ["Sa", "Re", "Ga", "Ma", "Pa", "Dha", "Ni"];
+
+        function playSound() {
+            if(!isPlaying) {
+                isPlaying = true;
+                document.getElementById("playButton").innerHTML = "Stop Raga Bhairav";
+                intervalId = setInterval(playNote, 1080);
+                playNote();
+            } else {
+                clearInterval(intervalId);
+                isPlaying = false;
+                document.getElementById("playButton").innerHTML = "Play Raga Bhairav";
+            }
+        }
+
+        function playNote() {
+            // Create a new oscillator node
+            var oscillator = audioCtx.createOscillator();
+            // Set the oscillator type to sine wave
+            oscillator.type = 'sine';
+            // Set the frequency of the note
+            oscillator.frequency.value = notes[noteIndex];
+            // Connect the oscillator to the audio context's destination
+            oscillator.connect(audioCtx.destination);
+            // Start the oscillator
+            oscillator.start();
+            // Stop the oscillator after 1.08 seconds
+            setTimeout(function () {
+                oscillator.stop();
+                oscillator.disconnect();
+                noteIndex++;
+                if(noteIndex === notes.length) {
+                    noteIndex = 0;
+                }
+            }, 1080);
+        }
+    </script>
+</body>
+</html>
