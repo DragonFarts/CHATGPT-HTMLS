@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script>
+    var i = 0.4; // variable to edit the duration
+    var color = "black";
+    function changeColor() {
+      if (color === "black") {
+        color = "white";
+      } else {
+        color = "black";
+      }
+      document.body.style.background = color;
+      setTimeout(changeColor, i);
+    }
+  </script>
+</head>
+<body onload="changeColor()">
+</body>
+</html>
