@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>DRAGON FART'S SYNTH N DRUM MACHINE</title>
+</head>
+<body>
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      <br>
+DRAGON FART'S SYNTH N DRUM MACHINE
+      <br>
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+    <div>
+      <label>SAWTOOTH-Frequency Sequence:</label>
+      <br>
+      <input type="text" id="frequencyArray1Input" value="0">
+      <br>
+      <label>SAWTOOTH-Increment Interval (ms):</label>
+      <br>
+      <input type="text" id="incrementTime1Input" value="0">
+      <br>
+      <br>
+      <br>
+      <label>SINE-Frequency Sequence:</label>
+      <br>
+      <input type="text" id="frequencyArray2Input" value="0">
+      <br>
+      <label>SINE-Increment Interval (ms):</label>
+      <br>
+      <input type="text" id="incrementTime2Input" value="0">
+      <br>
+      <br>
+      <br>
+      <label>SQUARE-Frequency Sequence:</label>
+      <br>
+      <input type="text" id="frequencyArray3Input" value="0">
+      <br>
+      <label>SQUARE-Increment Interval (ms):</label>
+      <br>
+      <input type="text" id="incrementTime3Input" value="0">
+      <br>
+      <br>
+      <br>
+      <label>TRIANGLE-Frequency Sequence:</label>
+      <br>
+      <input type="text" id="frequencyArray4Input" value="0">
+      <br>
+      <label>TRIANGLE-Increment Interval (ms):</label>
+      <br>
+      <input type="text" id="incrementTime4Input" value="0">
+      <br>
+      <br>
+      <br>
+      <button onclick="updateVariables()">Update</button>
+    </div>
+    
+    <script>
+      function updateVariables() {
+        // Get values from input fields
+        var frequencyArray1Input = document.getElementById("frequencyArray1Input").value;
+        var incrementTime1Input = document.getElementById("incrementTime1Input").value;
+        var frequencyArray2Input = document.getElementById("frequencyArray2Input").value;
+        var incrementTime2Input = document.getElementById("incrementTime2Input").value;
+        var frequencyArray3Input = document.getElementById("frequencyArray3Input").value;
+        var incrementTime3Input = document.getElementById("incrementTime3Input").value;
+        var frequencyArray4Input = document.getElementById("frequencyArray4Input").value;
+        var incrementTime4Input = document.getElementById("incrementTime4Input").value;
+
+        // Update variables in script
+        frequencyArray1 = frequencyArray1Input.split(",");
+        incrementTime1 = incrementTime1Input;
+        frequencyArray2 = frequencyArray2Input.split(",");
+        incrementTime2 = incrementTime2Input;
+        frequencyArray3 = frequencyArray3Input.split(",");
+        incrementTime3 = incrementTime3Input;
+        frequencyArray4 = frequencyArray4Input.split(",");
+        incrementTime4 = incrementTime4Input;
+      }
+    </script>
+</body>
+<body>
+
+    <audio id="audio1" src="https://wavlist.com/wav/drum_bass.wav"></audio>
+    <audio id="audio2" src="https://wavlist.com/wav/drum_snare2.wav"></audio>
+    <audio id="audio3" src="https://wavlist.com/wav/tomtom_hi.wav"></audio>
+    <audio id="audio4" src="https://wavlist.com/wav/drum_stick.wav"></audio>
+    <audio id="audio5" src="https://wavlist.com/wav/cymbal2.wav"></audio>
+    <br>
+    <input type="text" id="sequence1" name="sequence1" value="0">
+    <label for="sequence1">KICK:</label>
+    <br>
+    <input type="text" id="sequence2" name="sequence2" value="0">
+    <label for="sequence2">SNARE:</label>
+    <br>
+    <input type="text" id="sequence3" name="sequence3" value="0">
+    <label for="sequence3">TOMTOM:</label>
+    <br>
+    <input type="text" id="sequence4" name="sequence4" value="0">
+    <label for="sequence4">STICK:</label>
+    <br>
+    <input type="text" id="sequence5" name="sequence5" value="0">
+    <label for="sequence5">CRASH:</label>
+    <br>
+    <label for="interval">Increment Time Interval (ms):</label>
+    <input type="text" id="interval" name="interval" value="0">
+    <br>
+    <button id="play-button" onclick="playLoop()">Play</button>
+    <script>
+      var i = 0;
+      var loadCount = 0;
+      var seqArr1;
+      var seqArr2;
+      var seqArr3;
+      var seqArr4;
+      var seqArr5;
+      var interval;
+      var audio1 = document.getElementById("audio1");
+      var audio2 = document.getElementById("audio2");
+      var audio3 = document.getElementById("audio3");
+      var audio4 = document.getElementById("audio4");
+      var audio5 = document.getElementById("audio5");
+  
+      function playLoop() {
+        var sequence1 = document.getElementById("sequence1").value;
+        var sequence2 = document.getElementById("sequence2").value;
+        var sequence3 = document.getElementById("sequence3").value;
+        var sequence4 = document.getElementById("sequence4").value;
+        var sequence5 = document.getElementById("sequence5").value;
+        interval = document.getElementById("interval").value;
+        seqArr1 = sequence1.split(" ");
+        seqArr2 = sequence2.split(" ");
+        seqArr3 = sequence3.split(" ");
+        seqArr4 = sequence4.split(" ");
+        seqArr5 = sequence5.split(" ");
+        i = 0;
+        loadCount = 0;
+        audio1.load();
+        audio2.load();
+        audio3.load();
+        audio4.load();
+        audio5.load();
+        audio1.addEventListener("canplay", function() {
+          loadCount++;
+          if (loadCount === 5) {
+            playAudio();
+          }
+        });
+        audio2.addEventListener("canplay", function() {
+          loadCount++;
+          if (loadCount === 5) {
+            playAudio();
+          }
+        });
+        audio3.addEventListener("canplay", function() {
+          loadCount++;
+          if (loadCount === 5) {
+            playAudio();
+          }
+        });
+        audio4.addEventListener("canplay", function() {
+          loadCount++;
+          if (loadCount === 5) {
+            playAudio();
+          }
+        });
+        audio5.addEventListener("canplay", function() {
+          loadCount++;
+          if (loadCount === 5) {
+            playAudio();
+          }
+        });
+      }
+      function playAudio() {
+        if (seqArr1[i] == 1) {
+          audio1.currentTime = 0;
+          audio1.play();
+        }
+        if (seqArr2[i] == 1) {
+          audio2.currentTime = 0;
+          audio2.play();
+        }
+        if (seqArr3[i] == 1) {
+          audio3.currentTime = 0;
+          audio3.play();
+        }
+        if (seqArr4[i] == 1) {
+          audio4.currentTime = 0;
+          audio4.play();
+        }
+        if (seqArr5[i] == 1) {
+          audio5.currentTime = 0;
+          audio5.play();
+        }
+        i = (i + 1) % seqArr1.length;
+        setTimeout(playAudio, interval);
+      }
+    </script>
+
+<script>
+  var playButton = document.getElementById("play-button");
+  var audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+  // Oscillator 1
+  var oscillator1 = audioContext.createOscillator();
+  var frequencyArray1 = [0];
+  var currentFrequencyIndex1 = 0;
+  var incrementTime1 = 0;
+
+  // Oscillator 2
+  var oscillator2 = audioContext.createOscillator();
+  var frequencyArray2 = [0];
+  var currentFrequencyIndex2 = 0;
+  var incrementTime2 = 0;
+
+  // Oscillator 3
+  var oscillator3 = audioContext.createOscillator();
+  var frequencyArray3 = [0];
+  var currentFrequencyIndex3 = 0;
+  var incrementTime3 = 0;
+
+  // Oscillator 4
+  var oscillator4 = audioContext.createOscillator();
+  var frequencyArray4 = [0];
+  var currentFrequencyIndex4 = 0;
+  var incrementTime4 = 0;
+
+
+  playButton.addEventListener("click", function() {
+
+    // Oscillator 1
+    oscillator1.frequency.value = frequencyArray1[currentFrequencyIndex1];
+    oscillator1.type = "sawtooth";
+    oscillator1.connect(audioContext.destination);
+    oscillator1.start();
+
+    setInterval(function() {
+      currentFrequencyIndex1 = (currentFrequencyIndex1 + 1) % frequencyArray1.length;
+      oscillator1.frequency.value = frequencyArray1[currentFrequencyIndex1];
+    }, incrementTime1);
+
+    // Oscillator 2
+    oscillator2.frequency.value = frequencyArray2[currentFrequencyIndex2];
+    oscillator2.type = "sine";
+    oscillator2.connect(audioContext.destination);
+    oscillator2.start();
+
+    setInterval(function() {
+      currentFrequencyIndex2 = (currentFrequencyIndex2 + 1) % frequencyArray2.length;
+      oscillator2.frequency.value = frequencyArray2[currentFrequencyIndex2];
+    }, incrementTime2);
+
+    // Oscillator 3
+    oscillator3.frequency.value = frequencyArray3[currentFrequencyIndex3];
+    oscillator3.type = "square";
+    oscillator3.connect(audioContext.destination);
+    oscillator3.start();
+
+    setInterval(function() {
+      currentFrequencyIndex3 = (currentFrequencyIndex3 + 1) % frequencyArray3.length;
+      oscillator3.frequency.value = frequencyArray3[currentFrequencyIndex3];
+    }, incrementTime3);
+
+    // Oscillator 4
+    oscillator4.frequency.value = frequencyArray4[currentFrequencyIndex4];
+    oscillator4.type = "Triangle";
+    oscillator4.connect(audioContext.destination);
+    oscillator4.start();
+
+    setInterval(function() {
+      currentFrequencyIndex4 = (currentFrequencyIndex4 + 1) % frequencyArray4.length;
+      oscillator4.frequency.value = frequencyArray4[currentFrequencyIndex4];
+    }, incrementTime4);
+  });
+</script>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+Sequence Example for Synths
+      <br>
+108,0,108,0,216,0,432,0
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+Sequence Example for Drums
+      <br>
+1 1 0 1 1
+      <br>
+      <br>
+      <br>
+CLUB BEAT SIMP = Kick (1 0) and Snare (0 1) and Interval 500
+</body>
+</html>

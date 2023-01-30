@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <title>Market Game</title>
+  <br>
+  <br>
+  <p>My Money: <span id="money">108</span></p>
+  <br>
+  <style>
+    .hide-column {
+        display: none;
+    }
+  </style>
+  <head>
+    <title>Three Buttons and List Box</title>
+    <script>
+      function nextDay() {
+        const itemList = document.getElementById("itemList");
+        const rows = itemList.getElementsByTagName("tr");
+        for (let i = 0; i < rows.length; i++) {
+          rows[i].style.display = "none";
+        }
+
+        let randomRows = [];
+        while (randomRows.length < 5) {
+          let randomIndex = Math.floor(Math.random() * rows.length);
+          if (!randomRows.includes(randomIndex)) {
+            randomRows.push(randomIndex);
+          }
+        }
+
+        for (let i = 0; i < randomRows.length; i++) {
+          rows[randomRows[i]].style.display = "table-row";
+        }
+      }
+    </script>
+
+    <script>
+        function nextDay() {
+            var table = document.getElementById("itemList");
+            var rows = table.rows;
+            for (var i = 0; i < rows.length; i++) {
+                var min = rows[i].cells[1].innerHTML;
+                var max = rows[i].cells[2].innerHTML;
+                var random = (Math.ceil(Math.random() * (max - min + 1) + min * 10) / 10).toFixed(2);
+                rows[i].cells[4].innerHTML = random;
+            }
+        }
+    </script>
+  </head>
+  <body>
+    <button id="nextday" onclick="nextDay()">Next Day</button>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <table id="itemList">
+      <tr>
+        <td><p style="text-align:right;">Fake Item One   ________$</p></td>
+        <td class="hide-column">1</td>
+        <td class="hide-column">50</td>
+        <td class="hide-column">NOT ASSIGNED</td>
+        <td>420</td>
+        <td><button onclick="incrementValue(this); decrementValue(this)">Buy!</button></td>
+        <td><button onclick="incrementValue2(this); decrementValue2(this)">Sell!</button></td>
+        <td>0</td>
+        <td>___units</td>
+      </tr>
+      <tr>
+        <td><p style="text-align:right;">Bad Item One   ________$</p></td>
+        <td class="hide-column">1</td>
+        <td class="hide-column">50</td>
+        <td class="hide-column">NOT ASSIGNED</td>
+        <td>420</td>
+        <td><button onclick="incrementValue(this); decrementValue(this)">Buy!</button></td>
+        <td><button onclick="incrementValue2(this); decrementValue2(this)">Sell!</button></td>
+        <td>0</td>
+        <td>___units</td>
+      </tr>
+      <tr>
+        <td><p style="text-align:right;">Bad Item Two   ________$</p></td>
+        <td class="hide-column">1</td>
+        <td class="hide-column">50</td>
+        <td class="hide-column">NOT ASSIGNED</td>
+        <td>420</td>
+        <td><button onclick="incrementValue(this); decrementValue(this)">Buy!</button></td>
+        <td><button onclick="incrementValue2(this); decrementValue2(this)">Sell!</button></td>
+        <td>0</td>
+        <td>___units</td>
+      </tr>
+      <tr>
+        <td><p style="text-align:right;">Bad Item Three   ________$</p></td>
+        <td class="hide-column">1</td>
+        <td class="hide-column">50</td>
+        <td class="hide-column">NOT ASSIGNED</td>
+        <td>420</td>
+        <td><button onclick="incrementValue(this); decrementValue(this)">Buy!</button></td>
+        <td><button onclick="incrementValue2(this); decrementValue2(this)">Sell!</button></td>
+        <td>0</td>
+        <td>___units</td>
+      </tr>
+      <tr>
+        <td><p style="text-align:right;">OK Item One   ________$</p></td>
+        <td class="hide-column">1</td>
+        <td class="hide-column">50</td>
+        <td class="hide-column">NOT ASSIGNED</td>
+        <td>420</td>
+        <td><button onclick="incrementValue(this); decrementValue(this)">Buy!</button></td>
+        <td><button onclick="incrementValue2(this); decrementValue2(this)">Sell!</button></td>
+        <td>0</td>
+        <td>___units</td>
+      </tr>
+      <tr>
+        <td><p style="text-align:right;">OK Item Two   ________$</p></td>
+        <td class="hide-column">1</td>
+        <td class="hide-column">50</td>
+        <td class="hide-column">NOT ASSIGNED</td>
+        <td>420</td>
+        <td><button onclick="incrementValue(this); decrementValue(this)">Buy!</button></td>
+        <td><button onclick="incrementValue2(this); decrementValue2(this)">Sell!</button></td>
+        <td>0</td>
+        <td>___units</td>
+      </tr>
+      <tr>
+        <td><p style="text-align:right;">OK Item Three   ________$</p></td>
+        <td class="hide-column">1</td>
+        <td class="hide-column">50</td>
+        <td class="hide-column">NOT ASSIGNED</td>
+        <td>420</td>
+        <td><button onclick="incrementValue(this); decrementValue(this)">Buy!</button></td>
+        <td><button onclick="incrementValue2(this); decrementValue2(this)">Sell!</button></td>
+        <td>0</td>
+        <td>___units</td>
+      </tr>
+      <tr>
+        <td><p style="text-align:right;">Good Item One   ________$</p></td>
+        <td class="hide-column">1</td>
+        <td class="hide-column">50</td>
+        <td class="hide-column">NOT ASSIGNED</td>
+        <td>420</td>
+        <td><button onclick="incrementValue(this); decrementValue(this)">Buy!</button></td>
+        <td><button onclick="incrementValue2(this); decrementValue2(this)">Sell!</button></td>
+        <td>0</td>
+        <td>___units</td>
+      </tr>
+      <tr>
+        <td><p style="text-align:right;">Good Item Two   ________$</p></td>
+        <td class="hide-column">1</td>
+        <td class="hide-column">50</td>
+        <td class="hide-column">NOT ASSIGNED</td>
+        <td>420</td>
+        <td><button onclick="incrementValue(this); decrementValue(this)">Buy!</button></td>
+        <td><button onclick="incrementValue2(this); decrementValue2(this)">Sell!</button></td>
+        <td>0</td>
+        <td>___units</td>
+      </tr>
+      <tr>
+        <td><p style="text-align:right;">Good Item Three   ________$</p></td>
+        <td class="hide-column">1</td>
+        <td class="hide-column">50</td>
+        <td class="hide-column">NOT ASSIGNED</td>
+        <td>420</td>
+        <td><button onclick="incrementValue(this); decrementValue(this)">Buy!</button></td>
+        <td><button onclick="incrementValue2(this); decrementValue2(this)">Sell!</button></td>
+        <td>0</td>
+        <td>___units</td>
+      </tr>
+      <tr>
+        <td><p style="text-align:right;">Rare Item One   ________$</p></td>
+        <td class="hide-column">1</td>
+        <td class="hide-column">50</td>
+        <td class="hide-column">NOT ASSIGNED</td>
+        <td>420</td>
+        <td><button onclick="incrementValue(this); decrementValue(this)">Buy!</button></td>
+        <td><button onclick="incrementValue2(this); decrementValue2(this)">Sell!</button></td>
+        <td>0</td>
+        <td>___units</td>
+      </tr>
+      <tr>
+        <td><p style="text-align:right;">Rare Item Two   ________$</p></td>
+        <td class="hide-column">1</td>
+        <td class="hide-column">50</td>
+        <td class="hide-column">NOT ASSIGNED</td>
+        <td>420</td>
+        <td><button onclick="incrementValue(this); decrementValue(this)">Buy!</button></td>
+        <td><button onclick="incrementValue2(this); decrementValue2(this)">Sell!</button></td>
+        <td>0</td>
+        <td>___units</td>
+      </tr>
+      <tr>
+        <td><p style="text-align:right;">Rare Item Three   ________$</p></td>
+        <td class="hide-column">1</td>
+        <td class="hide-column">50</td>
+        <td class="hide-column">NOT ASSIGNED</td>
+        <td>420</td>
+        <td><button onclick="incrementValue(this); decrementValue(this)">Buy!</button></td>
+        <td><button onclick="incrementValue2(this); decrementValue2(this)">Sell!</button></td>
+        <td>0</td>
+        <td>___units</td>
+      </tr>
+    </table>
+  </body>
+  <script>
+    let myMoney = 108;
+
+    function incrementValue(button) {
+      // Find the row containing the button
+      let row = button.parentNode.parentNode;
+
+      // Find the 7th column (index 6) in the row
+      let column8 = row.cells[7];
+
+      // Increment the value in column 8
+      column8.innerHTML = parseInt(column8.innerHTML) + 1;
+    }
+    function decrementValue(button) {
+      // Find the row containing the button
+      let row = button.parentNode.parentNode;
+
+      // Find the 5th column (index 4) in the row
+      let column5 = row.cells[4];
+
+      let cost = parseInt(column5.innerHTML);
+
+      if (cost <= myMoney) {
+        // Decrement the value in column 5 from myMoney
+        myMoney -= cost;
+
+        // Update myMoney value in the HTML element with id "money"
+        document.getElementById("money").innerHTML = myMoney;
+      }
+    }   
+
+    function decrementValue2(button) {
+      // Find the row containing the button
+      let row = button.parentNode.parentNode;
+
+      // Find the 5th column (index 4) in the row
+      let column5 = row.cells[4];
+      let cost = parseInt(column5.innerHTML);
+
+      // Find the 7th column (index 6) in the row
+      let column8 = row.cells[7];
+      let units2 = parseInt(column8.innerHTML);
+
+      // Check if there are enough units to sell
+      if (units2 > 0) {
+        myMoney += cost;
+        document.getElementById("money").innerHTML = myMoney;
+      }
+    } 
+    function incrementValue2(button2) {
+      // Find the row containing the button
+      let row = button2.parentNode.parentNode;
+
+      // Find the 7th column (index 6) in the row
+      let column8 = row.cells[7];
+
+      // Store the value of column 8 in a variable
+      let units = parseInt(column8.innerHTML);
+
+      // Check if there are any units available
+      if (units > (-1)) {
+        // Decrement the value in column 8
+        if (units != 0) {
+          column8.innerHTML = units - 1;
+        }
+      } 
+    }
+
+  </script>
+  <script>
+    // Get all the rows in the table
+    var rows = document.querySelectorAll("table tr");
+
+    // Get the "Next Day" button
+    var nextDayBtn = document.getElementById("nextday");
+
+    // Add an event listener to the button
+    nextDayBtn.addEventListener("click", function() {
+      // Hide all the rows
+      for (var i = 0; i < rows.length; i++) {
+        rows[i].style.display = "none";
+      }
+
+      // Create an array to store the randomly selected rows
+      var selectedRows = [];
+
+      // Select 5 random rows
+      for (var i = 0; i < 5; i++) {
+        // Generate a random index
+        var randomIndex = Math.floor(Math.random() * rows.length);
+
+        // Check if the randomly generated index is already in the selectedRows array
+        // If it is, generate a new index
+        while (selectedRows.indexOf(randomIndex) !== -1) {
+          randomIndex = Math.floor(Math.random() * rows.length);
+        }
+
+        // Add the randomly generated index to the selectedRows array
+        selectedRows.push(randomIndex);
+
+        // Show the row at the randomly generated index
+        rows[randomIndex].style.display = "table-row";
+      }
+    });
+  </script>
+</html>"

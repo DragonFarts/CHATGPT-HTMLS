@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Three.js Line of Cubes</title>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.117.0/build/three.min.js"></script>
+  </head>
+  <body>
+    <div id="container"></div>
+    <script>
+      // Set up the scene
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(
+        75,
+        window.innerWidth / window.innerHeight,
+        0.1,
+        1000
+      );
+      camera.position.z = 54;
+      const renderer = new THREE.WebGLRenderer();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      document.getElementById("container").appendChild(renderer.domElement);
+  // Set up the cubes
+  const numberOfCubes = 216; // Change this number to adjust the number of cubes
+  const cubeSize = 0.2;
+  const gap = 0.05;
+  const cubes = [];
+  const grayscaleColors = [0x222222, 0x444444, 0x666666, 0x888888, 0xaaaaaa, 0xcccccc, 0xffffff];
+  for (let i = 0; i < numberOfCubes; i++) {
+    const cube = new THREE.BoxGeometry(cubeSize, cubeSize, cubeSize);
+    const material = new THREE.MeshBasicMaterial({ color: grayscaleColors[i % grayscaleColors.length] });
+    const mesh = new THREE.Mesh(cube, material);
+    mesh.position.z = i * (cubeSize + gap);
+    mesh.position.y = -cubeSize - 0.2;
+    scene.add(mesh);
+    cubes.push(mesh);
+  }
+
+  // Add the same amount of cubes to the left of the center cubes
+  for (let i = 0; i < numberOfCubes; i++) {
+    const cube = new THREE.BoxGeometry(cubeSize, cubeSize, cubeSize);
+    const material = new THREE.MeshBasicMaterial({ color: grayscaleColors[i % grayscaleColors.length] });
+    const mesh = new THREE.Mesh(cube, material);
+    mesh.position.z = i * (cubeSize + gap);
+    mesh.position.y = cubeSize;
+    mesh.position.x = -cubeSize - gap;
+    scene.add(mesh);
+    cubes.push(mesh);
+  }
+  // Add the same amount of cubes to the left of the center cubes
+  for (let i = 0; i < numberOfCubes; i++) {
+    const cube = new THREE.BoxGeometry(cubeSize, cubeSize, cubeSize);
+    const material = new THREE.MeshBasicMaterial({ color: grayscaleColors[i % grayscaleColors.length] });
+    const mesh = new THREE.Mesh(cube, material);
+    mesh.position.z = i * (cubeSize + gap);
+    mesh.position.y = cubeSize;
+    mesh.position.x = -cubeSize - gap - gap - gap - gap - gap - gap;
+    scene.add(mesh);
+    cubes.push(mesh);
+  }
+  // Add the same amount of cubes to the left of the center cubes
+  for (let i = 0; i < numberOfCubes; i++) {
+    const cube = new THREE.BoxGeometry(cubeSize, cubeSize, cubeSize);
+    const material = new THREE.MeshBasicMaterial({ color: grayscaleColors[i % grayscaleColors.length] });
+    const mesh = new THREE.Mesh(cube, material);
+    mesh.position.z = i * (cubeSize + gap);
+    mesh.position.y = cubeSize;
+    mesh.position.x = -cubeSize - gap - gap - gap - gap - gap - gap - gap - gap - gap - gap - gap - gap;
+    scene.add(mesh);
+    cubes.push(mesh);
+  }
+  // Add the same amount of cubes to the right of the center cubes
+  for (let i = 0; i < numberOfCubes; i++) {
+    const cube = new THREE.BoxGeometry(cubeSize, cubeSize, cubeSize);
+    const material = new THREE.MeshBasicMaterial({ color: grayscaleColors[i % grayscaleColors.length] });
+    const mesh = new THREE.Mesh(cube, material);
+    mesh.position.z = i * (cubeSize + gap);
+    mesh.position.y = cubeSize;
+    mesh.position.x = cubeSize + gap;
+    scene.add(mesh);
+    cubes.push(mesh);
+  }
+  // Add the same amount of cubes to the right of the center cubes
+  for (let i = 0; i < numberOfCubes; i++) {
+    const cube = new THREE.BoxGeometry(cubeSize, cubeSize, cubeSize);
+    const material = new THREE.MeshBasicMaterial({ color: grayscaleColors[i % grayscaleColors.length] });
+    const mesh = new THREE.Mesh(cube, material);
+    mesh.position.z = i * (cubeSize + gap);
+    mesh.position.y = cubeSize;
+    mesh.position.x = cubeSize + gap + gap + gap + gap + gap + gap;
+    scene.add(mesh);
+    cubes.push(mesh);
+  }
+  // Add the same amount of cubes to the right of the center cubes
+  for (let i = 0; i < numberOfCubes; i++) {
+    const cube = new THREE.BoxGeometry(cubeSize, cubeSize, cubeSize);
+    const material = new THREE.MeshBasicMaterial({ color: grayscaleColors[i % grayscaleColors.length] });
+    const mesh = new THREE.Mesh(cube, material);
+    mesh.position.z = i * (cubeSize + gap);
+    mesh.position.y = cubeSize;
+    mesh.position.x = cubeSize + gap + gap + gap + gap + gap + gap + gap + gap + gap + gap + gap + gap;
+    scene.add(mesh);
+    cubes.push(mesh);
+  }
+  // Animate the cubes
+  let cameraZ = 54;
+  const speed = 0.0108; // Change this number to adjust the speed
+  const animate = function() {
+    requestAnimationFrame(animate);
+    cubes.forEach((cube) => {
+      cube.rotation.x += 0.00001;
+      cube.rotation.y += 0.00001;
+    });
+    cameraZ -= speed;
+    camera.position.z = cameraZ;
+    camera.rotation.z += 108;
+    renderer.render(scene, camera);
+  };
+  animate();
+</script>
+  </body>
+</html>
