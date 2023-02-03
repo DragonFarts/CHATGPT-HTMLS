@@ -1,0 +1,100 @@
+<html>
+  <head>
+    <style>
+      .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        flex-wrap: wrap;
+      }
+      
+      .square {
+        width: 72px;
+        height: 72px;
+        border: 2px solid black;
+        border-radius: 0;
+      }
+      
+      .red {
+        background-color: red;
+      }
+      
+      .blue {
+        background-color: blue;
+      }
+      
+      .green {
+        background-color: green;
+      }
+      
+      .yellow {
+        background-color: yellow;
+      }
+      
+      .circle {
+        width: 300px;
+        height: 300px;
+        border: 2px solid black;
+        border-radius: 50%;
+        background-color: black;
+        text-align: center;
+        font-size: 24px;
+        color: white;
+      }
+    </style>
+  </head>
+  <body onload="start()">
+    <div class="container">
+      <div class="square red" onclick="stopTimer(this)"></div>
+      <div class="square blue" onclick="stopTimer(this)"></div>
+      <div class="square green" onclick="stopTimer(this)"></div>
+      <div class="square yellow" onclick="stopTimer(this)"></div>
+      <div class="circle" id="circle"></div>
+      <div id="firstTimer"></div>
+      <div id="secondTimer"></div>
+    </div>
+    
+    <script>
+      var intervalId;
+      var secondTimerText = document.getElementById("secondTimer");
+      
+      function start() {
+        var colors = ["red", "green", "blue", "yellow"];
+        var circle = document.getElementById("circle");
+        var firstTimerText = document.getElementById("firstTimer");
+        var startTime = performance.now();
+        var timeout = Math.floor(Math.random() * (21000 - 5000 + 1) + 5000);
+        
+        setTimeout(function() {
+          var randomIndex = Math.floor(Math.random() * colors.length);
+          circle.style.backgroundColor = colors[randomIndex];
+          firstTimerText.innerHTML = "First Timer: " + Math.floor(performance.now() - startTime) + "ms";
+          
+          var secondTimerStart = performance.now();
+          intervalId = setInterval(function() {
+            secondTimerText.innerHTML = "▪▪▪Second Timer: " + Math.floor(performance.now() - secondTimerStart) + "ms";
+          }, 50);
+        }, timeout);
+      }
+
+      function stopTimer(square) {
+        if (circle.style.backgroundColor === square.classList[1] && intervalId) {
+          clearInterval(intervalId);
+        }
+      }
+      
+      var redSquare = document.getElementsByClassName("red")[0];
+      redSquare.addEventListener("click", function() { stopTimer(redSquare); });
+      
+      var greenSquare = document.getElementsByClassName("green")[0];
+      greenSquare.addEventListener("click", function() { stopTimer(greenSquare); });
+      
+      var blueSquare = document.getElementsByClassName("blue")[0];
+      blueSquare.addEventListener("click", function() { stopTimer(blueSquare); });
+      
+      var yellowSquare = document.getElementsByClassName("yellow")[0];
+      yellowSquare.addEventListener("click", function() { stopTimer(yellowSquare); });
+    </script>
+  </body>
+</html>
