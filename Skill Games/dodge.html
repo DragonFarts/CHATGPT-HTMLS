@@ -1,0 +1,107 @@
+<html>
+  <head>
+    <style>
+      body {
+        background-color: black;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .red-square {
+        position: absolute;
+        width: 50px;
+        height: 50px;
+        background-color: red;
+      }
+      .white-cube {
+        position: absolute;
+        width: 50px;
+        height: 50px;
+        background-color: white;
+        transform-style: preserve-3d;
+      }
+      .game-over {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background-color: black;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 36px;
+        color: green;
+        opacity: 0;
+        transition: opacity 1s ease-out;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="red-square" id="red-square"></div>
+    <div class="game-over" id="game-over">Game Over</div>
+    <script>
+      const redSquare = document.getElementById("red-square");
+      const gameOver = document.getElementById("game-over");
+      let whiteCubes = [];
+
+      document.addEventListener("mousemove", function(event) {
+        redSquare.style.left = event.clientX + "px";
+        redSquare.style.top = event.clientY + "px";
+      });
+      document.addEventListener("touchmove", function(event) {
+        redSquare.style.left = event.touches[0].clientX + "px";
+        redSquare.style.top = event.touches[0].clientY + "px";
+      });
+
+      function randomIntFromInterval(min, max) {
+        return Math.floor(Math.random() * (max - min + 1) + min);
+      }
+
+      function createWhiteCube() {
+        let cube = document.createElement("div");
+        cube.className = "white-cube";
+        cube.style.left = randomIntFromInterval(0, window.innerWidth - 50) + "px";
+        cube.style.top = "-50px";
+        cube.style.transform = `rotateX(${randomIntFromInterval(0, 360)}deg) rotateY(${randomIntFromInterval(
+          0,
+          360
+        )}deg) rotateZ(${randomIntFromInterval(0)}deg)`;
+        document.body.appendChild(cube);
+        whiteCubes.push(cube);
+      }
+
+      function animateWhiteCubes() {
+        whiteCubes.forEach(function(cube, index) {
+          let top = parseInt(cube.style.top);
+          let left = parseInt(cube.style.left);
+
+          if (top > window.innerHeight) {
+            cube.remove();
+            whiteCubes.splice(index, 1);
+          } else {
+            cube.style.top = top + 5 + "px";
+          }
+
+          if (
+            redSquare.offsetLeft < left + 50 &&
+            redSquare.offsetLeft + 50 > left &&
+            redSquare.offsetTop < top + 50 &&
+            redSquare.offsetTop + 50 > top
+          ) {
+            gameOver.style.opacity = 1;
+            setTimeout(function() {
+              gameOver.style.opacity = 0;
+              whiteCubes.forEach(function(cube) {
+                cube.remove();
+              });
+              whiteCubes = [];
+            }, 1000);
+          }
+        });
+      }
+
+      setInterval(createWhiteCube, 270);
+      setInterval(animateWhiteCubes, 32);
+    </script>
+  </body>
+</html>

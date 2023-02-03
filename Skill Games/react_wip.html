@@ -1,0 +1,80 @@
+<html>
+  <head>
+    <style>
+      .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        flex-wrap: wrap;
+      }
+      
+      .square {
+        width: 72px;
+        height: 72px;
+        border: 2px solid black;
+        border-radius: 0;
+      }
+      
+      .red {
+        background-color: red;
+      }
+      
+      .blue {
+        background-color: blue;
+      }
+      
+      .green {
+        background-color: green;
+      }
+      
+      .yellow {
+        background-color: yellow;
+      }
+      
+      .circle {
+        width: 300px;
+        height: 300px;
+        border: 2px solid black;
+        border-radius: 50%;
+        background-color: black;
+        text-align: center;
+        font-size: 24px;
+        color: white;
+      }
+    </style>
+  </head>
+  <body onload="start()">
+    <div class="container">
+      <div class="square red"></div>
+      <div class="square blue"></div>
+      <div class="square green"></div>
+      <div class="square yellow"></div>
+      <div class="circle" id="circle"></div>
+      <div id="firstTimer"></div>
+      <div id="secondTimer"></div>
+    </div>
+    
+    <script>
+      function start() {
+        var colors = ["red", "green", "blue", "yellow"];
+        var circle = document.getElementById("circle");
+        var firstTimerText = document.getElementById("firstTimer");
+        var secondTimerText = document.getElementById("secondTimer");
+        var startTime = performance.now();
+        var timeout = Math.floor(Math.random() * (21000 - 5000 + 1) + 5000);
+        
+        setTimeout(function() {
+          var randomIndex = Math.floor(Math.random() * colors.length);
+          circle.style.backgroundColor = colors[randomIndex];
+          firstTimerText.innerHTML = "First Timer: " + Math.floor(performance.now() - startTime) + "ms";
+          
+          var secondTimerStart = performance.now();
+          var intervalId = setInterval(function() {
+            secondTimerText.innerHTML = "▪▪▪Second Timer: " + Math.floor(performance.now() - secondTimerStart) + "ms";
+          }, 50);
+        }, timeout);
+      }
+    </script>
+  </body>
+</html>
