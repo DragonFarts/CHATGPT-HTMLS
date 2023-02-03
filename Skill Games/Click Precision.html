@@ -1,0 +1,100 @@
+<html>
+  <head>
+    <style>
+      body {
+        background-color: black;
+        height: 100vh;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .square {
+        position: absolute;
+        width: 50px;
+        height: 50px;
+        background-color: white;
+      }
+      .cube {
+        position: absolute;
+        width: 50px;
+        height: 50px;
+        border: 1px solid white;
+      }
+      .score {
+        color: white;
+        font-weight: bold;
+        position: absolute;
+        z-index: 1;
+      }
+    </style>
+  </head>
+  <body onmousemove="updateCube(event)" onclick="checkOverlap()">
+    <script>
+      const dropSquare = () => {
+        let square = document.createElement("div");
+        square.classList.add("square");
+        square.style.top = -200;
+        square.style.left = Math.floor(Math.random() * (window.innerWidth - 50)) + "px";
+        document.body.appendChild(square);
+        let pos = -100;
+        let id = setInterval(frame, 1);
+        function frame() {
+          if (pos === window.innerHeight) {
+            clearInterval(id);
+            square.remove();
+          } else {
+            pos++;
+            square.style.top = pos + "px";
+          }
+        }
+      };
+      setInterval(dropSquare, 500);
+
+      let cube = document.createElement("div");
+      cube.classList.add("cube");
+      document.body.appendChild(cube);
+
+      let score = 0;
+
+      const updateCube = (event) => {
+        cube.style.left = event.clientX - 25 + "px";
+        cube.style.top = event.clientY - 25 + "px";
+      };
+
+      const checkOverlap = () => {
+        let squares = document.getElementsByClassName("square");
+        for (let i = 0; i < squares.length; i++) {
+          let square = squares[i];
+          let squareRect = square.getBoundingClientRect();
+          let cubeRect = cube.getBoundingClientRect();
+          if (
+            squareRect.left < cubeRect.right &&
+            squareRect.right > cubeRect.left &&
+            squareRect.top < cubeRect.bottom &&
+            squareRect.bottom > cubeRect.top 
+          ) {
+            let squareX = squareRect.left + squareRect.width / 2;
+            let squareY = squareRect.top + squareRect.height / 2;
+            let cubeX = cubeRect.left + cubeRect.width / 2;
+            let cubeY = cubeRect.top + cubeRect.height / 2;
+            let distance = Math.sqrt(
+              Math.pow(squareX - cubeX, 2) + Math.pow(squareY - cubeY, 2)
+            );
+            score += distance;
+            let scoreText = document.createElement("div");
+            scoreText.classList.add("score");  
+            scoreText.innerHTML = Math.floor(distance);
+            scoreText.style.left = squareX + "px";
+            scoreText.style.top = squareY + "px";
+            document.body.appendChild(scoreText);
+            setTimeout(() => {
+              scoreText.remove();
+            }, 5000);
+            square.remove();
+          }
+        }
+      };
+    </script>
+  </body>
+</html>
