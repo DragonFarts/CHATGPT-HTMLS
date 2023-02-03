@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      .container {
+        display: flex;
+        align-items: left;    
+        justify-content: top;
+        height: 100vh;
+      }
+
+      .circle {
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        border: 2px solid black;
+        position: relative;
+      }
+
+      .small-circle {
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        border: 2px solid black;
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+    </style>
+    
+  </head>
+  <body>
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~<button id="print-button">Print X and Y</button>
+    <div class="container">
+      <div class="circle">
+        <script>
+          var segments = 1;
+          var circles = [];
+          for (var i = 0; i < segments; i++) {
+            var smallCircle = document.createElement("div");
+            smallCircle.classList.add("small-circle");
+            smallCircle.style.transform =
+              "rotate(" + (360 / segments) * i + "deg) translate(100px) rotate(-" + (360 / segments) * i + "deg)";
+            document.querySelector(".circle").appendChild(smallCircle);
+            circles.push(smallCircle);
+          }
+        </script>
+      </div>
+    </div>
+    <script>
+      document.getElementById("print-button").addEventListener("click", function() {
+        circles.unshift(document.querySelector(".circle"));
+        for (var i = 0; i < circles.length; i++) {
+          var rect = circles[i].getBoundingClientRect();
+          console.log("X: " + rect.left + " Y: " + rect.top);
+        }
+      });
+    </script>
+  </body>
+</html>

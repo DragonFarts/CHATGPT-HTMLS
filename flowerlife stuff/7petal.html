@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      body {
+        background-color: black;
+      }
+      .circle {
+        position: absolute;
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        border: solid white 1.44px;
+      }
+    </style>
+  </head>
+  <body>
+    <script>
+      function repeatSeed(repeatX, repeatY, spaceX, spaceY) {
+        let seed = document.querySelectorAll('.circle');
+        let seedWidth = seed[0].offsetWidth + spaceX;
+        let seedHeight = seed[0].offsetHeight + spaceY;
+        for (let i = 0; i < repeatX; i++) {
+          for (let j = 0; j < repeatY; j++) {
+            seed.forEach(function (circle) {
+              let clone = circle.cloneNode(true);
+              clone.style.left = parseFloat(circle.style.left) + i * seedWidth + "px";
+              clone.style.top = parseFloat(circle.style.top) + j * seedHeight + "px";
+              document.body.appendChild(clone);
+            });
+          }
+        }
+      }
+    </script>    <div class="circle" style="left: 8px; top: 29px;"></div>
+    <div class="circle" style="left: 110px; top: 31px;"></div>
+    <div class="circle" style="left: 72.34898376464844px; top: 109.18315124511719px;"></div>
+    <div class="circle" style="left: -12.252094268798828px; top: 128.4927978515625px;"></div>
+    <div class="circle" style="left: -80.09688568115234px; top: 74.38837432861328px;"></div>
+    <div class="circle" style="left: -80.09688568115234px; top: -12.388374328613281px;"></div>
+    <div class="circle" style="left: -12.252094268798828px; top: -66.49279022216797px;"></div>
+    <div class="circle" style="left: 72.34898376464844px; top: -47.18315124511719px;"></div>
+    <script>
+      repeatSeed(21, 21, -1, -27.3);
+    </script>
+  </body>
+</html>

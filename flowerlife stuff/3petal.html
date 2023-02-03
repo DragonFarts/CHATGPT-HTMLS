@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      body {
+        background-color: black;
+      }
+      .circle {
+        position: absolute;
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        border: solid white 1.44px;
+      }
+    </style>
+  </head>
+  <body>
+    <script>
+      function repeatSeed(repeatX, repeatY, spaceX, spaceY) {
+        let seed = document.querySelectorAll('.circle');
+        let seedWidth = seed[0].offsetWidth + spaceX;
+        let seedHeight = seed[0].offsetHeight + spaceY;
+        for (let i = 0; i < repeatX; i++) {
+          for (let j = 0; j < repeatY; j++) {
+            seed.forEach(function (circle) {
+              let clone = circle.cloneNode(true);
+              clone.style.left = parseFloat(circle.style.left) + i * seedWidth + "px";
+              clone.style.top = parseFloat(circle.style.top) + j * seedHeight + "px";
+              document.body.appendChild(clone);
+            });
+          }
+        }
+      }
+    </script>
+    <div class="circle" style="left: 8px; top: 29px;"></div>
+    <div class="circle" style="left: 110px; top: 31px;"></div>
+    <div class="circle" style="left: -40px; top: 117.6025390625px;"></div>
+    <div class="circle" style="left: -40px; top: -55.6025390625px;"></div>
+    <script>
+      repeatSeed(21, 21, -100, -27);
+    </script>
+  </body>
+</html>
