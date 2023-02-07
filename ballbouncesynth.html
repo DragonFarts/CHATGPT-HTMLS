@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    #container {
+      background-color: black;
+      height: 95vh;
+      width: 98vw;
+      position: relative;
+    }
+
+    .ball {
+      background-color: white;
+      border-radius: 50%;
+      height: 21px;
+      position: absolute;
+      width: 21px;
+    }
+  </style>
+</head>
+<body>
+  <div id="container"></div>
+  <button id="playButton">Play</button>
+
+  <script>
+    let container = document.getElementById("container");
+    let balls = [];
+    let maxX = container.offsetWidth - 21;
+    let maxY = container.offsetHeight - 21;
+
+    container.addEventListener("click", function(event) {
+      let ball = document.createElement("div");
+      ball.classList.add("ball");
+      ball.style.left = event.clientX + "px";
+      ball.style.top = event.clientY + "px";
+      ball.speedX = 1;
+      ball.speedY = 1;
+      container.appendChild(ball);
+      balls.push(ball);
+    });
+
+    setInterval(function() {
+      for (let ball of balls) {
+        let x = parseInt(ball.style.left) + ball.speedX;
+        let y = parseInt(ball.style.top) + ball.speedY;
+        if (y > maxY || y < 0) {
+          ball.speedY = -ball.speedY;
+        if (y > maxY) {
+          oscillator.frequency.value = (y/14.4) + 14.4 + (Math.random() * 144 - 108);
+          gainNode.pan.value = 0;
+        } else {
+          oscillator.frequency.value = (y/10.8) + 14.4 + (Math.random() * 108 - 108);
+          gainNode.pan.value = 0;
+        }
+        }
+        if (x > maxX || x < 0) {
+          ball.speedX = -ball.speedX;
+        if (x > maxX) {
+          oscillator.frequency.value = (x/27.0) + 14.4 + (Math.random() * 270 - 108);
+          gainNode.pan.value = -1;
+        } else {
+          oscillator.frequency.value = (x/21.6) + 14.4 + (Math.random() * 216 - 108);
+          gainNode.pan.value = 1;
+        }
+        }
+
+
+
+        ball.style.left = x + "px";
+        ball.style.top = y + "px";
+      }
+    }, 1);
+
+    let playButton = document.getElementById("playButton");
+    let audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+    let oscillator = audioContext.createOscillator();
+    let gainNode = audioContext.createGain();
+
+    oscillator.type = "sine";
+    oscillator.frequency.value = 108;
+    gainNode.gain.value = 0.8;
+
+    oscillator.connect(gainNode).connect( audioContext.destination);
+
+
+    playButton.addEventListener("click", function() {
+
+      oscillator.start();
+
+    });
+  </script>
+</body>
+</html>
