@@ -1,0 +1,85 @@
+<html>
+  <head>
+    <style>
+      body {
+        background-color: black;
+      }
+      
+      .circle {
+        width: 320px;
+        height: 320px;
+        border-radius: 50%;
+        border: solid 1px white;
+        position: absolute;
+        margin: 100px auto;
+      }
+      .slice {
+        width: 1px;
+        height: 320px;
+        opacity: 1;
+        background-color: white;
+        position: absolute;
+        top: 0%;
+        left: 50%;
+        transform: translate(-50%, -100%);
+      }
+      .circle2 {
+        width: 320px;
+        height: 320px;
+        border-radius: 50%;
+        border: solid 1px white;
+        position: absolute;
+        margin: 100px auto;
+      }
+      .slice2 {
+        width: 1px;
+        height: 320px;
+        opacity: 1;
+        background-color: white;
+        position: absolute;
+        top: 0%;
+        left: 50%;
+        transform: translate(-50%, -100%);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="circle">
+    </div>
+    <div class="circle2">
+    </div>
+  </body>
+  
+  <script>
+    var variable = 1; 
+    var increment = 0.0000108;
+    
+    setInterval(function() {
+      variable += increment;
+      document.querySelector(".circle").innerHTML = "";
+      for (var i = 0; i < variable; i++) {
+        var slice = document.createElement("div");
+        slice.className = "slice";
+        slice.style.transform = "rotate(" + (360 / variable) * i + "deg)";
+        document.querySelector(".circle").appendChild(slice);
+      }
+      increment += 0.00000108;
+    }, 10);
+  </script>
+  <script>
+    var variable2 = 1; 
+    var increment2 = 0.0000108;
+    
+    setInterval(function() {
+      variable2 += increment2;
+      document.querySelector(".circle2").innerHTML = "";
+      for (var i = 0; i < variable2; i++) {
+        var slice2 = document.createElement("div2");
+        slice2.className = "slice2";
+        slice2.style.transform = "rotate(-" + (360 / variable2) * i + "deg)";
+        document.querySelector(".circle2").appendChild(slice2);
+      }
+      increment2 += 0.00000108;
+    }, 10);
+  </script>
+</html>
