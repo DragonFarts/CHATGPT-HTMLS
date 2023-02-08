@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Three.js Example</title>
+    <style>
+      body {
+        margin: 0;
+        background-color: black;
+      }
+      canvas {
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.120.1/build/three.js"></script>
+    <script>
+      var scene = new THREE.Scene();
+      var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+      var renderer = new THREE.WebGLRenderer();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      document.body.appendChild(renderer.domElement);
+
+      // Control variables
+      var repeatsX = 1;
+      var repeatsY = 1;
+      var repeatsZ = 1;
+      var numPrisms = 1;
+      var distance = 2;
+      var startRotationX = 0;
+      var startRotationY = 0;
+      var startRotationZ = 0;
+      var startScaleX = 0.216;
+      var startScaleY = 108;
+      var startScaleZ = 0.216;
+      var startPosX = 0;
+      var startPosY = 0;
+      var startPosZ = 0;
+
+      // Spiral control variables
+      var repeatXStart = 0;
+      var repeatXEnd = 10;
+      var repeatXStep = 1;
+
+      var repeatYStart = 0;
+      var repeatYEnd = 1;
+      var repeatYStep = 1;
+
+      var repeatZStart = 0;
+      var repeatZEnd = 1;
+      var repeatZStep = 1;
+
+      var numPrismsStart = 1;
+      var numPrismsEnd = 5;
+      var numPrismsStep = 1;
+
+      
+      
+      
+      
+      
+    
+      for (var n = numPrismsStart; n < numPrismsEnd; n += numPrismsStep) {
+        var spiralX = repeatXStart + (n * repeatXStep);
+        var spiralY = repeatYStart + (n * repeatYStep);
+        var spiralZ = repeatZStart + (n * repeatZStep);
+
+        for (var i = 0; i < repeatsX; i++) {
+          for (var j = 0; j < repeatsY; j++) {
+            for (var k = 0; k < repeatsZ; k++) {
+              var colorIndex = (i + j + k) / (repeatsX + repeatsY + repeatsZ);
+              var material = new THREE.MeshBasicMaterial({
+                color: new THREE.Color().setHSL(
+                  (n / numPrisms) * 0.5,
+                  0.5,
+                  0.5 + (0.5 * Math.sin(colorIndex * Math.PI))
+                ),
+              });
+              var geometry = new THREE.BoxGeometry(1, 1, 1);
+              var mesh = new THREE.Mesh(geometry, material);
+              mesh.position.x = i * distance + startPosX + spiralX;
+              mesh.position.y = j * distance + startPosY + spiralY;
+              mesh.position.z = k * distance + startPosZ + spiralZ;
+              mesh.rotation.x = startRotationX;
+              mesh.rotation.y = startRotationY;
+              mesh.rotation.z = startRotationZ;
+              mesh.scale.x = startScaleX;
+              mesh.scale.y = startScaleY;
+              mesh.scale.z = startScaleZ;  
+              scene.add(mesh);
+            }
+          }
+        }
+      }
+
+      camera.position.z = 20;
+      camera.position.y = 0;
+      camera.position.x = 9;
+
+      var animate = function () {
+        requestAnimationFrame(animate);
+        renderer.render(scene, camera);
+      };
+      animate();
+    </script>
+  </body>
+</html>
