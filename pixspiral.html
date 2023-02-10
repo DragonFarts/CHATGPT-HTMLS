@@ -1,0 +1,52 @@
+<html>
+  <head>
+    <style>
+      canvas {
+        background-color: #000000;
+      }
+    </style>
+  </head>
+  <body onload="draw()">
+    <canvas id="myCanvas" width="500" height="500"></canvas>
+    <script>
+      function draw() {
+        var canvas = document.getElementById("myCanvas");
+        var ctx = canvas.getContext("2d");
+        var radius = 250;
+        var angle = 0;
+        var xCenter = canvas.width / 2;
+        var yCenter = canvas.height / 2;
+        var x, y;
+        var dotsX = 3;
+        var dotsY = 3;
+        var spaceBetweenX = 5;
+        var spaceBetweenY = 5;
+        var numShades = 7;
+        var rgb = [];
+
+        for (var i = 0; i < numShades; i++) {
+          var red = Math.round(255 * i / (numShades - 1)).toString(16).padStart(2, '0');
+          var green = Math.round(255 * (numShades - 1 - i) / (numShades - 1)).toString(16).padStart(2, '0');
+          var blue = Math.round(255 * i / (numShades - 1)).toString(16).padStart(2, '0');
+          rgb.push('#' + red + green + blue);
+        }
+
+        var drawInterval = setInterval(function() {
+          x = xCenter + radius * Math.cos(angle);
+          y = yCenter + radius * Math.sin(angle);
+          for (var i = -dotsX; i <= dotsX; i++) {
+            for (var j = -dotsY; j <= dotsY; j++) {
+              ctx.fillStyle = rgb[Math.round(i + j + dotsX + dotsY) % numShades];
+              ctx.fillRect(Math.round(x + i * spaceBetweenX), Math.round(y + j * spaceBetweenY), 1, 1);
+            }
+          }
+          angle += 0.1;
+          radius -= 0.5;
+          if (radius < 0) {
+            clearInterval(drawInterval);
+          }
+        }, 10);
+      }
+    </script>
+  </body>
+</html>
