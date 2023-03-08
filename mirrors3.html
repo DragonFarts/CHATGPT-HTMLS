@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Canvas Animation with Sides Changing on a Timer</title>
+    <style>
+    #canvas {
+        width: 800px;
+        height: 400px;
+        border: 1px solid black;
+    }
+    .container {
+        display: flex;
+        align-items: flex-start;
+        flex-direction: row;
+    }
+    canvas {
+        border: 1px solid black;
+        margin: 0;
+        width: 800px;
+        height: 400px;
+    }
+    #hCanvas {
+        order: 1;
+    }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <canvas id="canvas"></canvas>
+        <canvas id="hCanvas"></canvas>
+    </div>
+    <div class="container">
+        <canvas id="vCanvas"></canvas>
+        <canvas id="hvCanvas"></canvas>
+    </div>
+
+    <script>
+    const canvas = document.getElementById('canvas');
+    const hCanvas = document.getElementById('hCanvas');
+    const vCanvas = document.getElementById('vCanvas');
+    const hvCanvas = document.getElementById('hvCanvas');
+
+    hCanvas.width = canvas.width;
+    hCanvas.height = canvas.height;
+    vCanvas.width = canvas.width;
+    vCanvas.height = canvas.height;
+    hvCanvas.width = canvas.width;
+    hvCanvas.height = canvas.height;
+
+    const context = canvas.getContext('2d');
+    const hContext = hCanvas.getContext('2d');
+    const vContext = vCanvas.getContext('2d');
+    const hvContext = hvCanvas.getContext('2d');
+
+    const centerX = canvas.width / 2;
+    const centerY = canvas.height / 2;
+    let time = 0;
+    let colorIndex = 0;
+    let sideIndex = 4;
+    let pingPong = true;
+
+    function drawHexagon(x, y, size, sides) {
+        context.beginPath();
+        for (let i = 0; i < sides; i++) {
+        const angle = (i / sides) * Math.PI * 2;
+        const newX = x + size * Math.cos(angle);
+        const newY = y + size * Math.sin(angle);
+        if (i === 0) {
+            context.moveTo(newX, newY);
+        } else {
+            context.lineTo(newX, newY);
+        }
+        }
+        context.closePath();
+    }
+
+    function changeSides() {
+        if (pingPong) {
+        sideIndex++;
+        if (sideIndex > 7) {
+            sideIndex = 6;  
+            pingPong = !pingPong;
+        }
+        } else {
+        sideIndex--;
+        if (sideIndex < 3) {
+            sideIndex = 4;
+            pingPong = !pingPong;
+        }
+        }
+    }
+
+    function rotateAndMove() {
+        // Rotate canvas by rotationAngle degrees
+        const rotationAngle = (Math.sin(time * Math.PI * 2) * 100);
+        context.translate(centerX, centerY);
+        context.rotate((rotationAngle * Math.PI) / 180);
+        context.translate(-centerX, -centerY);
+
+        // Move hexagon horizontally using three sine wave multipliers
+        const firstMultiplier = (Math.sin(time * Math.PI / 12) * 0.1) + 0.75;
+        const secondMultiplier = 0.2 + (Math.sin(time * Math.PI / 32) * 11.25);
+        const thirdMultiplier = 0.1 + (Math.sin(time * Math.PI / 12) * 0.25);
+        const x = centerX + (Math.sin(time * Math.PI * 1.44) * 69 * firstMultiplier * secondMultiplier * thirdMultiplier);
+
+        // Calculate the size of the hexagon using a sine wave multiplied by a fourth sine wave
+        const sizeMultiplier = 0.05 + (Math.sin(time * Math.PI / 54) * 3.5);
+        const size = (Math.sin(time * Math.PI * 15) * 10 * sizeMultiplier) + 10;
+
+        // Draw a hexagon with a rainbow color and changing number of sides
+        const rainbowColors = [];
+        for (let i = 0; i < 216; i++) {
+        const hue = i / 216;
+        const color = `hsl(${hue * 360}, 100%, 50%)`;
+        rainbowColors.push(color);
+        }
+        const color = rainbowColors[colorIndex];
+        context.fillStyle = color;
+        drawHexagon(x, centerY, size, sideIndex);
+        context.fill();
+        // Add black border around the hexagon
+        context.strokeStyle = 'black';
+        context.lineWidth = 2;
+        drawHexagon(x, centerY, size, sideIndex);
+        context.stroke();
+
+        // Increment colorIndex by 1 to cycle through rainbow colors
+        colorIndex = (colorIndex + 1) % 216;
+
+        // Increment time by 0.01 (controls the frequency of the sine wave)
+        time += 0.00025;
+
+        // Mirror canvas horizontally on hCanvas
+        hContext.clearRect(0, 0, hCanvas.width, hCanvas.height);
+        hContext.save();
+        hContext.scale(-1, 1);
+        hContext.drawImage(canvas, -canvas.width, 0);
+        hContext.restore();
+
+        // Mirror canvas vertically on vCanvas
+        vContext.clearRect(0, 0, vCanvas.width, vCanvas.height);
+        vContext.save();
+        vContext.scale(1, -1);
+        vContext.drawImage(canvas, 0, -canvas.height);
+        vContext.restore();
+
+        // Mirror canvas horizontally and vertically on hvCanvas
+        hvContext.clearRect(0, 0, hvCanvas.width, hvCanvas.height);
+        hvContext.save();
+        hvContext.scale(-1, -1);
+        hvContext.drawImage(canvas, -canvas.width, -canvas.height);
+        hvContext.restore();
+
+        // Call changeSides function every 21 second to change the number of sides
+        if (Math.floor(time * 1000) % 21000 === 0) {
+        changeSides();
+        }
+
+        // Call requestAnimationFrame to loop the animation
+        requestAnimationFrame(rotateAndMove);
+    }
+
+    // Call rotateAndMove function to start the animation loop
+    rotateAndMove();
+    </script>
+</body>
+</html>
