@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Canvas Tiler</title>
+	<style>
+		canvas {
+			border: 1px solid black;
+		}
+	</style>
+</head>
+<body>
+	<div>
+		<label>Pixel Color:</label>
+		<input type="color" id="pixelColor" value="#000000">
+	</div>
+	<div>
+		<label>Pixel Size:</label>
+		<input type="number" id="pixelSize" min="1" max="10" value="32">
+	</div>
+    <div>
+	    <canvas id="smallCanvas" width="200" height="200"></canvas>
+    </div>
+    <div>
+	    <canvas id="bigCanvas" width="2000" height="2000"></canvas>
+    </div>
+    <div>
+	    <canvas id="tileCanvas" width="400" height="400"></canvas>
+    </div>
+    <div>
+	    <canvas id="bigtileCanvas" width="2000" height="2000"></canvas>
+    </div>
+
+	<script>
+		// Get canvas elements
+		var smallCanvas = document.getElementById("smallCanvas");
+		var bigCanvas = document.getElementById("bigCanvas");
+		var tileCanvas = document.getElementById("tileCanvas");
+		var bigtileCanvas = document.getElementById("bigtileCanvas");
+
+		// Get context for small and big canvas
+		var smallCtx = smallCanvas.getContext("2d");
+		var bigCtx = bigCanvas.getContext("2d");
+		var tileCtx = tileCanvas.getContext("2d");
+		var bigtileCtx = bigtileCanvas.getContext("2d");
+
+		// Initialize mouse position and drawing flag
+		var mouseX = 0;
+		var mouseY = 0;
+		var isDrawing = false;
+
+		// Add event listeners to small canvas
+		smallCanvas.addEventListener("mousedown", function(e) {
+			isDrawing = true;
+			drawPixel(e.offsetX, e.offsetY);
+		});
+		smallCanvas.addEventListener("mousemove", function(e) {
+			if (isDrawing) {
+				drawPixel(e.offsetX, e.offsetY);
+			}
+		});
+		smallCanvas.addEventListener("mouseup", function() {
+			isDrawing = false;
+		});
+
+		// Draw a pixel on small canvas at given position
+		function drawPixel(x, y) {
+			// Get pixel color and size
+			var pixelColor = document.getElementById("pixelColor").value;
+			var pixelSize = document.getElementById("pixelSize").value;
+
+			// Draw pixel on small canvas
+			smallCtx.fillStyle = pixelColor;
+			smallCtx.fillRect(x, y, pixelSize, pixelSize);
+
+			// Draw pixel on big canvas
+			var imgData = smallCtx.getImageData(0, 0, smallCanvas.width, smallCanvas.height);
+			var tileWidth = bigCanvas.width / 10;
+			var tileHeight = bigCanvas.height / 10;
+			for (var i = 0; i < 10; i++) {
+				for (var j = 0; j < 10; j++) {
+					bigCtx.putImageData(imgData, i * tileWidth, j * tileHeight, 0, 0, tileWidth, tileHeight);
+				}
+			}
+
+			// Transform and draw on tile canvas
+			tileCtx.putImageData(imgData, 0, 0);
+			tileCtx.putImageData(horizontalMirror(imgData), smallCanvas.width, 0);
+			
+
+
+			tileCtx.putImageData(verticalMirror(imgData), 0, smallCanvas.height);
+			tileCtx.putImageData(horizontalMirror(verticalMirror(imgData)), smallCanvas.width, smallCanvas.height);
+
+			// Update big tile canvas every 50ms while mouse is down
+			if (isDrawing) {
+				setInterval(function() {
+					var imgData = tileCtx.getImageData(0, 0, tileCanvas.width, tileCanvas.height);
+					var tileWidth = bigtileCanvas.width / 5;
+					var tileHeight = bigtileCanvas.height / 5;
+					for (var i = 0; i < 5; i++) {
+						for (var j = 0; j < 5; j++) {
+							bigtileCtx.putImageData(imgData, i * tileWidth, j * tileHeight, 0, 0, tileWidth, tileHeight);
+						}
+					}
+				}, 50);
+			}
+		}
+
+		// Helper function to horizontally mirror an image data
+		function horizontalMirror(imgData) {
+			var width = imgData.width;
+			var height = imgData.height;
+			var mirroredImgData = smallCtx.createImageData(width, height);
+			for (var x = 0; x < width; x++) {
+				for (var y = 0; y < height; y++) {
+					var sourceIndex = (y * width + x) * 4;
+					var destIndex = (y * width + (width - x - 1)) * 4;
+					mirroredImgData.data[destIndex] = imgData.data[sourceIndex];
+					mirroredImgData.data[destIndex + 1] = imgData.data[sourceIndex + 1];
+					mirroredImgData.data[destIndex + 2] = imgData.data[sourceIndex + 2];
+					mirroredImgData.data[destIndex + 3] = imgData.data[sourceIndex + 3];
+				}
+			}
+			return mirroredImgData;
+		}
+
+		// Helper function to vertically mirror an image data
+		function verticalMirror(imgData) {
+			var width = imgData.width;
+			var height = imgData.height;
+			var mirroredImgData = smallCtx.createImageData(width, height);
+			for (var x = 0; x < width; x++) {
+				for (var y = 0; y < height; y++) {
+					var sourceIndex = (y * width + x) * 4;
+					var destIndex = ((height - y - 1) * width + x) * 4;
+					mirroredImgData.data[destIndex] = imgData.data[sourceIndex];
+					mirroredImgData.data[destIndex + 1] = imgData.data[sourceIndex + 1];
+					mirroredImgData.data[destIndex + 2] = imgData.data[sourceIndex + 2];
+					mirroredImgData.data[destIndex + 3] = imgData.data[sourceIndex + 3];
+				}
+			}
+			return mirroredImgData;
+		}
+	</script>
+</body>
+</html>
