@@ -1,0 +1,151 @@
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Grid and Drop-down Menu</title>
+        <style>
+            table {
+                border-collapse: collapse;
+            }
+            td {
+                width: 20px;
+                height: 20px;
+                border: 1px solid black;
+                text-align: center;
+                vertical-align: middle;
+                font-weight: bold;
+            }
+        </style>
+        <script>
+            var outputData = [];
+
+            function handleCellClick(x, y) {
+        var dropdown = document.getElementById("dropdown");
+        var colorDropdown = document.getElementById("colorDropdown");
+        var selected = dropdown.options[dropdown.selectedIndex].value;
+        var output = document.getElementById("output");
+
+        switch (selected) {
+            case "Player":
+                outputData.push({type: "player", x: x, y: y, value: "plr = {x: " + x + ", y: " + y + ", inventory: {}, moves: 0};"});
+                document.getElementById("cell_" + x + "_" + y).innerHTML = "plr";
+                document.getElementById("cell_" + x + "_" + y).style.backgroundColor = colorDropdown.value;
+
+                break;
+            case "Wall":
+                outputData.push({type: "wll", x: x, y: y, color: colorDropdown.value, value: "{x: " + x + ", y: " + y + ", color: '" + colorDropdown.value + "'},"});
+                document.getElementById("cell_" + x + "_" + y).innerHTML = "wll";
+                document.getElementById("cell_" + x + "_" + y).style.backgroundColor = colorDropdown.value;
+
+                break;
+            case "Goal":
+                outputData.push({type: "gol", x: x, y: y, color: colorDropdown.value, value: "{x: " + x + ", y: " + y + ", color: '" + colorDropdown.value + "'},"});
+                document.getElementById("cell_" + x + "_" + y).innerHTML = "gol";
+                document.getElementById("cell_" + x + "_" + y).style.backgroundColor = colorDropdown.value;
+
+                break;
+            case "Element":
+                outputData.push({type: "ele", x: x, y: y, color: colorDropdown.value, value: "{x: " + x + ", y: " + y + ", color: '" + colorDropdown.value + "'},"});
+                document.getElementById("cell_" + x + "_" + y).innerHTML = "ele";
+                document.getElementById("cell_" + x + "_" + y).style.backgroundColor = colorDropdown.value;
+
+                break;
+            case "RedirectionBox":
+                outputData.push({type: "rdb", x: x, y: y, value: "new RedirectionBox(" + x + ", " + y + ", 'rgba(255, 155, 75, 84)', 0),"});
+                document.getElementById("cell_" + x + "_" + y).innerHTML = "rdb";
+                document.getElementById("cell_" + x + "_" + y).style.backgroundColor = colorDropdown.value;
+
+                break;
+            case "Bomb":
+                outputData.push({type: "bmb", x: x, y: y, value: "bombs.push(new Bomb(" + x + ", " + y + "));"});
+                document.getElementById("cell_" + x + "_" + y).innerHTML = "bmb";
+                document.getElementById("cell_" + x + "_" + y).style.backgroundColor = colorDropdown.value;
+
+                break;
+            case "Key":
+                outputData.push({type: "key", x: x, y: y, color: colorDropdown.value, value: "new Key(" + x + ", " + y + ", '" + colorDropdown.value + "', 0),"});
+                document.getElementById("cell_" + x + "_" + y).innerHTML = "key";
+                document.getElementById("cell_" + x + "_" + y).style.backgroundColor = colorDropdown.value;
+
+                break;
+            case "Door":
+                outputData.push({type: "dor", x: x, y: y, color: colorDropdown.value, value: "new Door(" + x + ", " + y + ", '" + colorDropdown.value + "', 1),"});
+                document.getElementById("cell_" + x + "_" + y).innerHTML = "dor";
+                document.getElementById("cell_" + x + "_" + y).style.backgroundColor = colorDropdown.value;
+
+                break;
+        }
+    }
+
+
+        function handleSortClick() {
+            outputData.sort(function(a, b) {
+                if (a.type < b.type) {
+                    return -1;
+                } else if (a.type > b.type) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            });
+
+            var output = document.getElementById("output");
+            output.value = "";
+
+            var currentType = null;
+            for (var i = 0; i < outputData.length; i++) {
+                if (currentType != outputData[i].type) {
+                    output.value += outputData[i].type + "...\n";
+                    currentType = outputData[i].type;
+                }
+                if (outputData[i].color) {
+                    output.value += "{x: " + outputData[i].x + ", y: " + outputData[i].y + ", color: '" + outputData[i].color + "'},\n";
+                } else {
+                    output.value += outputData[i].value + "\n";
+                }
+            }
+        }
+    </script>
+    </head>
+    <body>
+        <select id="dropdown">
+            <option value="Player">Player</option>
+            <option value="Element">Element</option>
+            <option value="Goal">Goal</option>
+            <option value="Wall">Wall</option>
+            <option value="Bomb">Bomb</option>
+            <option value="RedirectionBox">RedirectionBox</option>
+            <option value="Key">Key</option>
+            <option value="Door">Door</option>
+        </select>
+        <select id="colorDropdown">
+            <optgroup label="Walls, Player, Goals, Elements">
+                <option value="red">Red</option>
+                <option value="green">Green</option>
+                <option value="blue">Blue</option>
+                <option value="yellow">Yellow</option>
+                <option value="black">Black</option>
+                <option value="gray">Gray</option>
+                <option value="white">White</option>
+                <option value="purple">Purple</option>
+                <option value="orange">Orange</option>
+                <option value="pink">Pink</option>
+                <option value="brown">Brown</option>
+            </optgroup>
+        </select>
+        <button onclick="handleSortClick()">Sort</button>
+        <table>
+            <tbody>
+                <script>
+                    for (var i = 0; i < 32; i++) {
+                        document.write("<tr>");
+                        for (var j = 0; j < 32; j++) {
+                            document.write('<td id="cell_' + j + '_' + i + '" onclick="handleCellClick(' + j + ', ' + i + ')"></td>');
+                        }
+                        document.write("</tr>");
+                    }
+                </script>
+            </tbody>
+        </table>
+        <textarea id="output" rows="10" cols="50"></textarea>
+    </body>
+    </html>
