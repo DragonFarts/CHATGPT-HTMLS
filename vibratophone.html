@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Advanced Vibratophone</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.7/dat.gui.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qwerty-hancock/0.6.0/qwerty-hancock.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/tone@14.8.37/build/Tone.min.js"></script>
+</head>
+<body>
+  <div id="kb"></div>
+  <script>
+    const s = {
+      oct: 'A3',
+      a: 0.01,
+      d: 0.2,
+      sus: 0.5,
+      r: 1,
+      fType: 'lowpass',
+      fFreq: 1000,
+      ef: 'none',
+      eD: 0.3,
+      rW: 0.5,
+      lfC: 0.1,
+      vD1: 5,
+      vR1: 6,
+      vD2: 2,
+      vR2: 10,
+      oscT: 'sine',
+      cD: 0.1,
+      pR: 0.5,
+      flT: 0.005,
+      flR: 0.25,
+      shP: 0,
+    };
+
+    function updKb() {
+      const k = new QwertyHancock({
+        id: 'kb',
+        width: 600,
+        height: 150,
+        octaves: 2,
+        startNote: s.oct,
+        whiteNotesColour: 'white',
+        blackNotesColour: 'black',
+        hoverColour: '#f3e939',
+        activeColour: 'yellow',
+      });
+      setupKbL(k);
+    }
+    updKb();
+
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+    const g = new dat.GUI();
+    g.add(s, 'oct', ['A1', 'A2', 'A3', 'A4', 'A5']).name('Octave').onChange(updKb);
+    g.add(s, 'a', 0, 2).step(0.01).name('Attack').listen();
+    g.add(s, 'd', 0, 2).step(0.01).name('Decay').listen();
+    g.add(s, 'sus', 0, 1).step(0.01).name('Sustain').listen();
+    g.add(s, 'r', 0, 2).step(0.01).name('Release').listen();
+    g.add(s, 'fType', ['lowpass', 'bandpass', 'highpass']).name('Filter Type').listen();
+    g.add(s, 'fFreq', 20, 20000).step(1).name('Filter Freq').listen();
+    g.add(s, 'ef', ['none', 'echo', 'reverb', 'loFiCruncher']).name('Effect').listen();
+    g.add(s, 'eD', 0, 1).step(0.01).name('Echo Delay').listen();
+    g.add(s, 'rW', 0, 1).step(0.01).name('Reverb Wet').listen();
+    g.add(s, 'lfC', 0, 1).step(0.01).name('LoFi Crunch').listen();
+    g.add(s, 'vD1', 0, 10).step(0.1).name('Vibrato Depth 1').listen();
+    g.add(s, 'vR1', 0, 20).step(0.1).name('Vibrato Rate 1').listen();
+    g.add(s, 'vD2', 0, 10).step(0.1).name('Vibrato Depth 2').listen();
+    g.add(s, 'vR2', 0, 20).step(0.1).name('Vibrato Rate 2').listen();
+    g.add(s, 'oscT', ['sine', 'square', 'sawtooth', 'triangle']).name('Oscillator Type').listen();
+    g.add(s, 'cD', 0, 1).step(0.01).name('Chorus Depth').listen();
+    g.add(s, 'pR', 0, 2).step(0.01).name('Phaser Rate').listen();
+    g.add(s, 'flT', 0, 0.02).step(0.001).name('Flanger Time').listen();
+    g.add(s, 'flR', 0, 1).step(0.01).name('Flanger Rate').listen();
+    g.add(s, 'shP', -12, 12).step(1).name('Shift Pitch').listen();
+
+    function createOsc(freq, type) {
+      const osc = audioContext.createOscillator();
+      osc.type = type;
+      osc.frequency.value = freq;
+
+      const gn = audioContext.createGain();
+      const flt = audioContext.createBiquadFilter();
+      flt.type = s.fType;
+      flt.frequency.value = s.fFreq;
+
+      const lfo1 = audioContext.createOscillator();
+      lfo1.frequency.value = s.vR1;
+
+      const lfo2 = audioContext.createOscillator();
+      lfo2.frequency.value = s.vR2;
+
+      const lg1 = audioContext.createGain();
+      lg1.gain.value = s.vD1;
+
+      const lg2 = audioContext.createGain();
+      lg2.gain.value = s.vD2;
+
+      osc.connect(gn);
+      gn.connect(flt);
+      flt.connect(audioContext.destination);
+
+      lfo1.connect(lg1);
+      lg1.connect(osc.frequency);
+      lfo1.start();
+
+      lfo2.connect(lg2);
+      lg2.connect(osc.frequency);
+      lfo2.start();
+
+      return { osc, gn, lfo1, lfo2 };
+    }
+
+    function applyEffect(node, effect) {
+      if (effect === 'echo') {
+        const delay = audioContext.createDelay();
+        const feedback = audioContext.createGain();
+        delay.delayTime.value = s.eD;
+        feedback.gain.value = 0.5;
+        node.connect(delay);
+        delay.connect(feedback);
+        feedback.connect(delay);
+        delay.connect(audioContext.destination);
+      } else if (effect === 'reverb') {
+        const convolver = audioContext.createConvolver();
+        const noiseBuffer = audioContext.createBuffer(2, 0.5 * audioContext.sampleRate, audioContext.sampleRate);
+        const left = noiseBuffer.getChannelData(0);
+        const right = noiseBuffer.getChannelData(1);
+        for (let i = 0; i < noiseBuffer.length; i++) {
+          left[i] = (Math.random() * 2 - 1) * 0.5;
+          right[i] = (Math.random() * 2 - 1) * 0.5;
+        }
+        convolver.buffer = noiseBuffer;
+        convolver.connect(audioContext.destination);
+        node.connect(convolver);
+        convolver.gain.value = s.rW;
+      } else if (effect === 'loFiCruncher') {
+        const bitCrusher = audioContext.createScriptProcessor(4096, 1, 1);
+        let phaser = 0;
+        bitCrusher.onaudioprocess = function (e) {
+          const step = Math.pow(0.5, 8 * s.lfC);
+          const input = e.inputBuffer.getChannelData(0);
+          const output = e.outputBuffer.getChannelData(0);
+          for (let i = 0; i < input.length; i++) {
+            phaser += input[i];
+            const val = step * Math.floor(phaser / step);
+            output[i] = val;
+          }
+        };
+        node.connect(bitCrusher);
+        bitCrusher.connect(audioContext.destination);
+      }
+    }
+
+    const notes = new Map();
+
+    function setupKbL(keyboard) {
+      keyboard.keyDown = function (note, frequency) {
+        const mainOsc = createOsc(frequency * Math.pow(2, s.shP / 12), s.oscT);
+        mainOsc.osc.start();
+
+        applyEffect(mainOsc.gn, s.ef);
+
+        const now = audioContext.currentTime;
+        mainOsc.gn.gain.setValueAtTime(0, now);
+        mainOsc.gn.gain.linearRampToValueAtTime(1, now + s.a);
+        mainOsc.gn.gain.linearRampToValueAtTime(s.sus, now + s.a + s.d);
+
+        notes.set(note, { mainOsc });
+      };
+
+      keyboard.keyUp = function (note, frequency) {
+        const { mainOsc } = notes.get(note);
+
+        const now = audioContext.currentTime;
+        mainOsc.gn.gain.cancelScheduledValues(now);
+        mainOsc.gn.gain.setValueAtTime(mainOsc.gn.gain.value, now);
+        mainOsc.gn.gain.linearRampToValueAtTime(0, now + s.r);
+
+        mainOsc.osc.stop(now + s.r);
+        mainOsc.lfo1.stop(now + s.r);
+        mainOsc.lfo2.stop(now + s.r);
+
+        notes.delete(note);
+      };
+    }
+
+    setupKbL();
+  </script>
+</body>
+</html>
+
+
