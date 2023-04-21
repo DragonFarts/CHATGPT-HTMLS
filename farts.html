@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>3D Sokoban</title>
+    <style>
+        body { margin: 0; }
+        canvas { display: block; }
+        #info {
+          position: absolute;
+          top: 10px;
+          left: 10px;
+          font-family: sans-serif;
+          font-size: 108px;
+          color: #ffffff;
+          background-color: rgba(0, 0, 0, 0.5);
+          padding: 5px;
+        }
+        
+      </style>
+  </head>
+  <body>
+    <div id="info"></div>
+
+    <script src="https://threejs.org/build/three.min.js"></script>
+    <script>
+      // Set up scene, camera, and renderer
+      const scene = new THREE.Scene();
+      const aspectRatio = window.innerWidth / window.innerHeight;
+      const width = 50;
+      const height = width / aspectRatio;
+      const camera = new THREE.OrthographicCamera(
+        -width / 2,
+        width / 2,
+        height / 2,
+        -height / 2,
+        0.1,
+        1000
+      );
+      camera.position.set(5, -3, 0);
+      camera.rotation.set(0.3, 0.3, -0.025);
+
+      const renderer = new THREE.WebGLRenderer();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      document.body.appendChild(renderer.domElement);
+
+      // Level data
+      const levels = [
+      {
+
+  data: [
+    "################################",
+    "#              ##              #",
+    "#   G     G    ##   B    G     #",
+    "#   B   B      P               #",
+    "#         B    ##        G     #",
+    "#              ##              #",
+    "################################"
+  ],
+  movesLimit: 69
+},
+{
+  data: [
+    "################################",
+    "#              ##              #",
+    "#   G     G    ##   B    G     #",
+    "#   B   B                      #",
+    "#   P     B    ##        G     #",
+    "#              ##        G     #",
+    "###################  ###########",
+    "###################  ###########",
+    "#G GG   G G   ##    ##          ",
+    "#BBBB   BBBB   ##    ##         ",
+    "#       B          ###          ",
+    "#  B               #            ",
+    "#  GB    BG      #####          ",
+    "#################               "
+  ],
+  movesLimit: 144
+},
+{
+        
+        data: [
+          "#################################   ",
+          "#  G          G    #           G  # ",
+          "#     B              B          #   ",
+          "#    ######      ##########     #   ",
+          "#     B              B          #   ",
+          "#  G          G    #           G  # ",
+          "#            B          B        #  ",
+          "###  ##########      ######  ###    ",
+          "#   B       G    #  G       B   #   ",
+          "#            B          B        #  ",
+          "#  ######      ##########     ##    ",
+          "#            B          B        #  ",
+          "#   G      B    #    B      G   #   ",
+          "###  #####################  ###     ",
+          "#   G          P           G   #    ",
+          "#   B      G    #    G      B   #   ",
+          "#            B          B        #  ",
+          "#  ######      ##########     ##    ",
+          "#            B          B        #  ",
+          "#   G          G    #           G  #",
+          "#     B              B          #   ",
+          "#    ######      ##########     #   ",
+          "#     B              B          #   ",
+          "#  G          G    #           G  # ",
+          "#################################   "
+        ],
+        movesLimit: 420
+      },
+{
+  data: [
+    "############################################ ",
+    "#                   b     B   B          G  #",
+    "#   G          B       B           G        #",
+    "#      B   B     G     G          B         #",
+    "#   ##########             ##########      # ",
+    "#    B       B   #             B        G  # ",
+    "#  G     B        #######         G         #",
+    "#           G    ##  B B  ##     B     G    #",
+    "#   G          ##         ##         B      #",
+    "#         #####           #####            # ",
+    "#        ##     B   B   B     ##           # ",
+    "#        #         G G         #           # ",
+    "#       ##           P           ##   G    # ",
+    "#       #         G   G         #           #",
+    "#       ##    B   #   B #   B    ##         #",
+    "#   G         ##    #   #    ##          B # ",
+    "#           #        ###        #          # ",
+    "#  B     ##           #           ##  G    # ",
+    "#        #         G     G         #        #",
+    "#G      ##           #           ##        # ",
+    "#       #         B     B         #        # ",
+    "#   G  ##        ##       ##        ##     # ",
+    "#     ##        ####     ####        ##   #  ",
+    "#B    #                                 # #  ",
+    "#G  B ##          B           B          ### ",
+    "#BBBGBB#####             G             ##### ",
+    "############################################ "
+  ],
+  movesLimit: 808
+},
+{
+  data: [
+    "#########B ######B #############     B  B   ",          
+    "#    G           G           G  #           ",
+    "#   #####     #####     #####   ########    ",
+    "#   #   #     #   #     #   #        B  #   ",
+    "# B # B #  G  # B # G  # B # B # ##### #    ",
+    "#   #         #   #     #   #   #    # #    ",
+    "#   ##  #     #####     #####   #  G # #    ",
+    "#   B   #  G  # B   G  # B   B   #     #    ",
+    "#       #     #   #     #   #          #    ",
+    "######  #   #  # B #  #####   G #### #######",
+    "#   #     B #     #     #       #          #",
+    "# B #  G     #  G  # G    B     #          #",
+    "#   #     # #     #     #      B#          #",
+    "######  ### ##  ### ### #####   #### B   ###",
+    "#       # B B G   G B B #   #   #  #####    ",
+    "# B     #   # #  #  # # #   # # #      #    ",
+    "#       # B B G   G B B #   #   ########    ",
+    "######  ##### ###  ## #####   G             ",
+    "#       # B B G   G B B #   #   #           ",
+    "# B     #     #  #### # # # # # #           ",
+    "        # B B G   G B B #   #   #           ",
+    "############# ####### #####   # # B BB B    ",
+    "            #                 # #  B   B    ",
+    "#     P    G#                 # #   BB      ",
+    "#           #     B B B B B B  # #   B B    ",
+    "#   G      ##                 # #           ",
+    "#           #    B B B B B B   # #          ",
+    "##########  ################   #       B    "
+  ],
+  movesLimit: 1080
+}
+      ];
+
+      let currentLevel = 0;
+      let moves = 1;
+
+      // Function to load a level
+      function loadLevel(level) {
+        // Reset moves
+        moves = 1;
+
+        // Clear the current level
+        scene.children.slice().forEach(object => {
+          if (object.type === "Mesh") {
+            scene.remove(object);
+          }
+        });
+
+        // Create level elements
+        const levelData = level.data;
+        for (let y = 0; y < levelData.length; y++) {
+          for (let x = 0; x < levelData[y].length; x++) {
+            let material;
+            switch (levelData[y][x]) {
+              case "#":
+                material = wallMaterial;
+                break;
+              case "P":
+                material = playerMaterial;
+                break;
+              case "B":
+                material = boxMaterial;
+                break;
+              case "G":
+                material = goalMaterial;
+                break;
+              default:
+                continue;
+            }
+            const cube = new THREE.Mesh(cubeGeometry, material);
+            cube.position.set(x - levelData[y].length / 2 + 0.5, -y + levelData.length / 2 - 0.5, 0);
+            scene.add(cube);
+          }
+        }
+
+        // Update playerCube reference
+        playerCube = null;
+        scene.traverse(object => {
+          if (object.material === playerMaterial) {
+            playerCube = object;
+          }
+        });
+      }
+
+      // Set up materials
+      const wallMaterial = new THREE.MeshBasicMaterial({ color: "green" });
+     
+      wallMaterial.transparent = true;
+wallMaterial.opacity = 0.5;
+const playerMaterial = new THREE.MeshBasicMaterial({ color: "blue" });
+playerMaterial.transparent = true;
+playerMaterial.opacity = 0.5;
+const boxMaterial = new THREE.MeshBasicMaterial({ color: "red" });
+boxMaterial.transparent = true;
+boxMaterial.opacity = 0.5;
+const goalMaterial = new THREE.MeshBasicMaterial({ color: "yellow" });
+goalMaterial.transparent = true;
+goalMaterial.opacity = 0.5;
+  // Set up geometry
+  const cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
+ // Create UI elements
+ const infoElement = document.getElementById("info");
+
+  // Load the initial level
+  let playerCube;
+  loadLevel(levels[currentLevel]);
+
+  // Set up controls
+  document.addEventListener("keydown", event => {
+    let newPosition = playerCube.position.clone();
+    let pushBox = null;
+
+    switch (event.key) {
+      case "ArrowLeft":
+        newPosition.x -= 1;
+        break;
+      case "ArrowRight":
+        newPosition.x += 1;
+        break;
+      case "ArrowUp":
+        newPosition.y += 1;
+        break;
+      case "ArrowDown":
+        newPosition.y -= 1;
+        break;
+    }
+
+    // Check if the new position is colliding with a box
+    let boxCollision = false;
+    let box = null;
+    scene.traverse(object => {
+      if (object.material === boxMaterial && object.position.equals(newPosition)) {
+        boxCollision = true;
+        box = object;
+      }
+      updateInfo();
+
+    });
+
+    // If there is a box collision, check if the box can be pushed
+    if (boxCollision) {
+      let newBoxPosition = box.position.clone();
+      switch (event.key) {
+        case "ArrowLeft":
+          newBoxPosition.x -= 1;
+          break;
+        case "ArrowRight":
+          newBoxPosition.x += 1;
+          break;
+        case "ArrowUp":
+          newBoxPosition.y += 1;
+          break;
+        case "ArrowDown":
+          newBoxPosition.y -= 1;
+          break;
+      }
+
+      if (isValidMove(newBoxPosition, box)) {
+        box.position.copy(newBoxPosition);
+        playerCube.position.copy(newPosition);
+        moves++;
+      }
+    } else {
+      if (isValidMove(newPosition, playerCube)) {
+        playerCube.position.copy(newPosition);
+        moves++;
+      }
+    }
+
+    if (isLevelComplete()) {
+    currentLevel++;
+    if (currentLevel < levels.length) {
+      alert("Level complete! Proceeding to Level " + (currentLevel + 1) + ".");
+      loadLevel(levels[currentLevel]);
+    } else {
+      alert("Congratulations! You have completed all levels!");
+    }
+  } else if (moves > levels[currentLevel].movesLimit) {
+    alert("Game over! You've exceeded the moves limit for Level " + (currentLevel + 1) + ". Restarting the level.");
+    loadLevel(levels[currentLevel]);
+  }
+});
+      // Function to update the info element
+      function updateInfo() {
+        infoElement.textContent = `Level: ${currentLevel + 1} | Moves: ${moves} | Moves Limit: ${levels[currentLevel].movesLimit}`;
+      }
+  // Function to check if a move is valid
+  function isValidMove(newPosition, movingObject) {
+    let collision = false;
+
+    scene.traverse(object => {
+      if (object !== movingObject && (object.material === wallMaterial || object.material === boxMaterial) && object.position.equals(newPosition)) {
+        collision = true;
+      }
+    });
+
+    return !collision;
+  }
+
+  // Function to check if the level is complete
+  function isLevelComplete() {
+    let goalsCovered = true;
+
+    scene.traverse(object => {
+      if (object.material === goalMaterial) {
+        let boxOnGoal = false;
+
+        scene.traverse(otherObject => {
+            if (otherObject.material === boxMaterial && otherObject.position.equals(object.position)) {
+boxOnGoal = true;
+}
+});
+if (!boxOnGoal) {
+          goalsCovered = false;
+        }
+      }
+    });
+
+    return goalsCovered;
+  }
+
+  // Set up camera position
+  camera.position.z = 10;
+
+// Render loop
+function animate() {
+  requestAnimationFrame(animate);
+
+  // Update camera position to follow the player with an offset
+  if (playerCube) {
+    const offsetX = 5;
+    const offsetY = -3;
+
+    camera.position.x = playerCube.position.x + offsetX;
+    camera.position.y = playerCube.position.y + offsetY;
+  }
+
+  renderer.render(scene, camera);
+}
+
+
+
+      // Initialize UI elements
+      updateInfo();
+
+      // Start rendering
+      animate();
+</script>
+</body>
+</html>
