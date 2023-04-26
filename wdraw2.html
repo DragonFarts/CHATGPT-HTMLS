@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.min.js">
+        </script><script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.7/dat.gui.min.js">
+        </script>
+    </head>
+    <body>
+        <script>
+        let a = [];
+        let b;
+        let copiedObjects = []; // Added variable to store copied objects
+
+        function setup() {
+          createCanvas(windowWidth, windowHeight);
+          b = new dat.GUI();
+          b.add(this, 'c').name('Create Square');
+        b.add(this, 'd').name('Create Circle');
+        b.add(this, 'e').name('Create Triangle');
+        b.add(this, 'f').name('Create Hexagon');
+        b.add(this, 'g').name('Create Line');
+        }
+function draw() {
+  background(220);
+  for (let h of a) {
+    h.i();
+  }
+
+  let selectedObjects = a.filter(h => h.j);
+
+  if (selectedObjects.length > 0) {
+    let centerX = selectedObjects.reduce((sum, h) => sum + h.k, 0) / selectedObjects.length;
+    let centerY = selectedObjects.reduce((sum, h) => sum + h.l, 0) / selectedObjects.length;
+
+    for (let h of selectedObjects) {
+      if (keyIsDown(87)) {
+        h.l -= 5;
+      }
+      if (keyIsDown(83)) {
+        h.l += 5;
+      }
+      if (keyIsDown(65)) {
+        h.k -= 5;
+      }
+      if (keyIsDown(68)) {
+        h.k += 5;
+      }
+      if (keyIsDown(81)) {
+        let angle = PI / 8;
+        let newK = centerX + (h.k - centerX) * cos(angle) - (h.l - centerY) * sin(angle);
+        let newL = centerY + (h.k - centerX) * sin(angle) + (h.l - centerY) * cos(angle);
+        h.k = newK;
+        h.l = newL;
+        h.m -= angle;
+      }
+      if (keyIsDown(69)) {
+        let angle = -PI / 8;
+        let newK = centerX + (h.k - centerX) * cos(angle) - (h.l - centerY) * sin(angle);
+        let newL = centerY + (h.k - centerX) * sin(angle) + (h.l - centerY) * cos(angle);
+        h.k = newK;
+        h.l = newL;
+        h.m += angle;
+      }
+      if (keyIsDown(70)) {
+        h.o += 0.1;
+      }
+      if (keyIsDown(72)) {
+        h.o -= 0.1;
+      }
+      if (keyIsDown(84)) {
+        h.n += 0.1;
+      }
+      if (keyIsDown(71)) {
+        h.n -= 0.1;
+      }
+      if (keyIsDown(82)) {
+        h.p += 1;
+      }
+      if (keyIsDown(89)) {
+        h.p -= 1;
+      }
+
+        
+    }
+  }
+}
+
+
+
+
+function c(){let q=new r(width/2,height/2);a.push(q);let s=b.add(q,'j');s.name('Square '+a.length)}
+function d(){let t=new u(width/2,height/2);a.push(t);let v=b.add(t,'j');v.name('Circle '+a.length)}
+function e(){let w=new x(width/2,height/2);a.push(w);let y=b.add(w,'j');y.name('Triangle '+a.length)}
+function f(){let z=new A(width/2,height/2);a.push(z);let B=b.add(z,'j');B.name('Hexagon '+a.length)}
+function g(){let C=new D(width/2,height/2);a.push(C);let E=b.add(C,'j');E.name('Line '+a.length)}
+class r{constructor(x,y){this.k=x;this.l=y;this.m=0;this.j=false;this.n=1;this.o=1;this.p=1}i(){push();translate(this.k,this.l);rotate(this.m);scale(this.o,this.n);strokeWeight(this.p);noFill();rectMode(CENTER);rect(0,0,50,50);pop()}}
+class u{constructor(x,y){this.k=x;this.l=y;this.m=0;this.j=false;this.n=1;this.o=1;this.p=1}i(){push();translate(this.k,this.l);rotate(this.m);scale(this.o,this.n);strokeWeight(this.p);noFill();ellipseMode(CENTER);ellipse(0,0,50,50);pop()}}
+class x{constructor(x,y){this.k=x;this.l=y;this.m=0;this.j=false;this.n=1;this.o=1;this.p=1}i(){push();translate(this.k,this.l);rotate(this.m);scale(this.o,this.n);strokeWeight(this.p);noFill();triangle(-25,-25,25,-25,0,25);pop()}}
+class A{constructor(x,y){this.k=x;this.l=y;this.m=0;this.j=false;this.n=1;this.o=1;this.p=1}i(){push();translate(this.k,this.l);rotate(this.m);scale(this.o,this.n);strokeWeight(this.p);noFill();beginShape();vertex(-25,-25);vertex(-12.5,-37.5);vertex(12.5,-37.5);vertex(25,-25);vertex(25,25);vertex(12.5,37.5);vertex(-12.5,37.5);vertex(-25,25);endShape(CLOSE);pop()}}
+class D {
+  constructor(x, y) {
+    this.k = x;
+    this.l = y;
+    this.m = 0;
+    this.j = false;
+    this.n = 1;
+    this.o = 1;
+    this.p = 1;
+  }
+
+  i() {
+    push();
+    translate(this.k, this.l);
+    rotate(this.m);
+    scale(this.o, this.n);
+    strokeWeight(this.p);
+    noFill();
+    line(0, -25, 0, 25); // updated line function call to draw a vertical line
+    pop();
+  }
+}
+function keyPressed(){if(key===' '){c()}
+
+  if (keyCode === 67) { // 'c' key
+    copiedObjects = a.filter(h => h.j);
+  }
+  if (keyCode === 86) { // 'v' key
+    for (let obj of copiedObjects) {
+      let newObj = Object.assign(Object.create(Object.getPrototypeOf(obj)), obj);
+      newObj.k += 10;
+      newObj.l += 10;
+      a.push(newObj);
+      let s = b.add(newObj, 'j');
+      s.name('Clone ' + a.length);
+    }
+  }
+  if (keyCode === 90) { // 'z' key
+    copiedObjects = [];
+  }
+}
+</script>
+</body>
+</html>
